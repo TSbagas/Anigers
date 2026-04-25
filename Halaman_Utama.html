@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AnimeVerse | Streaming & Community</title>
+    <title>AnimeVerse | Premium Streaming</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
@@ -34,6 +34,7 @@
         background-color: var(--dark);
         color: var(--text);
         overflow-x: hidden;
+        scroll-behavior: smooth;
       }
 
       /* Navbar */
@@ -64,41 +65,80 @@
         gap: 25px;
         list-style: none;
       }
-      .nav-links a {
-        text-decoration: none;
-        color: #ccc;
-        transition: 0.3s;
-        font-size: 14px;
+      .nav-links li {
         cursor: pointer;
+        font-size: 14px;
+        transition: 0.3s;
+        color: #ccc;
       }
-      .nav-links a:hover {
+      .nav-links li:hover,
+      .nav-links li.active {
         color: var(--primary);
       }
 
-      .search-bar input {
-        padding: 8px 18px;
-        border-radius: 20px;
-        border: 1px solid var(--glass);
+      /* Search Bar Modern */
+      .search-box {
+        position: relative;
+        display: flex;
+        align-items: center;
         background: #1f1f3d;
+        border-radius: 25px;
+        padding: 5px 15px;
+        border: 1px solid var(--glass);
+        transition: 0.3s;
+      }
+      .search-box:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+      }
+      .search-box input {
+        background: transparent;
+        border: none;
         color: white;
+        padding: 8px 10px;
         outline: none;
+        width: 150px;
+        transition: 0.3s;
+      }
+      .search-box input:focus {
+        width: 220px;
+      }
+      .search-box i {
+        color: var(--primary);
+        font-size: 14px;
+      }
+
+      /* Wrapper Page */
+      .page {
+        display: none;
+        animation: fadeIn 0.5s ease;
+      }
+      .page.active {
+        display: block;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
       }
 
       /* Hero Slider */
       .hero-slider {
         position: relative;
-        height: 500px;
+        height: 480px;
         width: 100%;
         overflow: hidden;
+        background: #000;
       }
       .slide {
         position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
         opacity: 0;
-        transition: 0.8s ease;
+        transition: 0.8s;
         background-size: cover;
         background-position: center;
         display: flex;
@@ -107,34 +147,31 @@
       }
       .slide.active {
         opacity: 1;
-        z-index: 1;
       }
       .slide::before {
         content: "";
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(to right, #0a0a12 10%, transparent 100%);
+        inset: 0;
+        background: linear-gradient(to right, #0a0a12 25%, transparent 100%);
       }
       .hero-content {
         position: relative;
         z-index: 2;
         max-width: 600px;
       }
-      .hero-content h1 {
-        font-size: 36px;
-        margin-bottom: 10px;
+      .btn-play {
+        background: var(--primary);
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
       }
-      .hero-content p {
-        color: #ccc;
-        font-size: 13px;
-        margin-bottom: 20px;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+      .btn-play:hover {
+        transform: scale(1.05);
+        background: var(--secondary);
       }
 
       /* Grid */
@@ -161,296 +198,450 @@
         border: 1px solid var(--glass);
       }
       .anime-card:hover {
-        transform: translateY(-5px);
+        transform: translateY(-8px);
         border-color: var(--primary);
       }
       .anime-card img {
         width: 100%;
-        height: 250px;
+        height: 260px;
         object-fit: cover;
       }
       .card-info {
         padding: 12px;
-      }
-      .card-info h3 {
         font-size: 13px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        text-align: center;
       }
 
-      /* MODAL DETAIL (Halaman Putar) */
-      .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.95);
-        z-index: 2000;
-        display: none;
-        overflow-y: auto;
-        padding: 40px 8%;
-      }
-      .modal.active {
-        display: block;
-      }
-      .close-modal {
-        position: fixed;
-        top: 20px;
-        right: 40px;
-        font-size: 30px;
-        cursor: pointer;
-        z-index: 2001;
-      }
-
-      .player-section {
+      /* Detail Page */
+      .player-grid {
         display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 30px;
+        grid-template-columns: 2.5fr 1fr;
+        gap: 25px;
+        padding: 30px 8%;
       }
-      .video-box {
+      .video-wrapper {
         width: 100%;
         aspect-ratio: 16/9;
         background: #000;
         border-radius: 15px;
         overflow: hidden;
-        border: 1px solid var(--glass);
       }
-      .video-box iframe {
+      .video-wrapper iframe {
         width: 100%;
         height: 100%;
         border: none;
       }
-
-      .info-box h2 {
-        margin-bottom: 15px;
-        color: var(--primary);
+      .episodes-box {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 20px;
+        max-height: 500px;
+        display: flex;
+        flex-direction: column;
       }
-      .info-box p {
-        font-size: 14px;
-        color: #bbb;
-        line-height: 1.6;
-        margin-bottom: 20px;
-      }
-
-      .episode-list {
-        background: #16162a;
-        border-radius: 10px;
-        padding: 15px;
-        height: 300px;
+      .ep-list {
+        flex: 1;
         overflow-y: auto;
+        margin-top: 15px;
       }
       .ep-item {
-        padding: 10px;
+        padding: 12px;
         border-bottom: 1px solid var(--glass);
         cursor: pointer;
-        transition: 0.2s;
+        border-radius: 8px;
+        margin-bottom: 5px;
         font-size: 14px;
       }
       .ep-item:hover {
         background: var(--primary);
-        color: white;
       }
 
-      .recommendation-section {
-        margin-top: 50px;
-      }
-
-      .btn {
-        padding: 10px 25px;
-        border-radius: 20px;
-        border: none;
-        cursor: pointer;
-        font-weight: 600;
-        transition: 0.3s;
-      }
-      .btn-primary {
+      /* Global Chat Modern */
+      .chat-launcher {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 55px;
+        height: 55px;
         background: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         color: white;
+        cursor: pointer;
+        z-index: 1001;
+        box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
       }
-
-      .slider-dots {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
+      .chat-window {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 320px;
+        height: 450px;
+        background: #16162a;
+        border-radius: 15px;
+        border: 1px solid var(--glass);
+        display: none;
+        flex-direction: column;
+        z-index: 1000;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+      .chat-header {
+        padding: 15px;
+        background: #1f1f3d;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .chat-body {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: 13px;
+      }
+      .msg {
+        background: var(--glass);
+        padding: 8px 12px;
+        border-radius: 10px;
+        align-self: flex-start;
+        max-width: 80%;
+      }
+      .msg.me {
+        background: var(--primary);
+        align-self: flex-end;
+      }
+      .chat-footer {
+        padding: 12px;
         display: flex;
         gap: 8px;
+        background: #1f1f3d;
       }
-      .dot {
-        width: 10px;
-        height: 10px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 50%;
-        cursor: pointer;
+      .chat-footer input {
+        flex: 1;
+        background: #252545;
+        border: none;
+        padding: 10px;
+        color: white;
+        border-radius: 8px;
+        outline: none;
       }
-      .dot.active {
+
+      #loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
         background: var(--primary);
-        width: 25px;
-        border-radius: 5px;
+        z-index: 2000;
+        display: none;
       }
 
       @media (max-width: 900px) {
-        .player-section {
+        .player-grid {
           grid-template-columns: 1fr;
+        }
+        .search-box input {
+          width: 100px;
         }
       }
     </style>
   </head>
   <body>
+    <div id="loader"></div>
+
     <nav class="navbar">
-      <a class="logo" href="/">Anime<span>Verse</span></a>
+      <div class="logo" onclick="showPage('home-page')">
+        Anime<span>Verse</span>
+      </div>
       <ul class="nav-links">
-        <li><a onclick="fetchAnime('TRENDING_DESC', 'Beranda')">Home</a></li>
-        <li>
-          <a onclick="fetchAnime('POPULARITY_DESC', 'Populer')">Populer</a>
+        <li onclick="showPage('home-page')" class="nav-item active">Home</li>
+        <li
+          onclick="loadCategory('POPULARITY_DESC', 'Paling Populer')"
+          class="nav-item"
+        >
+          Populer
         </li>
-        <li><a onclick="fetchSchedule()">Jadwal</a></li>
+        <li onclick="loadSchedule()" class="nav-item">Jadwal</li>
       </ul>
-      <div class="search-bar">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
         <input
           type="text"
-          id="search-input"
           placeholder="Cari anime..."
           onkeypress="handleSearch(event)"
+          id="main-search"
         />
       </div>
     </nav>
 
-    <header class="hero-slider" id="hero-slider"></header>
+    <section id="home-page" class="page active">
+      <header class="hero-slider" id="hero-slider"></header>
+      <div class="container">
+        <h2 class="section-title">Lagi Trending</h2>
+        <div class="anime-grid" id="trending-list"></div>
+      </div>
+    </section>
 
-    <main class="container">
-      <h2 class="section-title" id="content-title">Sedang Tren</h2>
-      <div class="anime-grid" id="anime-list"></div>
-    </main>
+    <section id="category-page" class="page">
+      <div class="container">
+        <h2 class="section-title" id="category-title">Explore</h2>
+        <div class="anime-grid" id="category-list"></div>
+      </div>
+    </section>
 
-    <div id="video-modal" class="modal">
-      <span class="close-modal" onclick="closeModal()">&times;</span>
-      <div id="modal-content"></div>
+    <section id="detail-page" class="page">
+      <div id="detail-content"></div>
+    </section>
+
+    <div class="chat-launcher" onclick="toggleChat()">
+      <i class="fas fa-comments"></i>
+    </div>
+    <div id="chat-window" class="chat-window">
+      <div class="chat-header">
+        <span style="font-weight: 600"
+          ><i class="fas fa-circle" style="color: #00ff88; font-size: 8px"></i>
+          Global Chat</span
+        >
+        <i
+          class="fas fa-times"
+          onclick="toggleChat()"
+          style="cursor: pointer"
+        ></i>
+      </div>
+      <div class="chat-body" id="chat-messages">
+        <div class="msg">Halo! Selamat bergabung di komunitas AnimeVerse.</div>
+      </div>
+      <div class="chat-footer">
+        <input
+          type="text"
+          id="chat-input"
+          placeholder="Ketik sesuatu..."
+          onkeypress="if (event.key === 'Enter') sendMessage();"
+        />
+        <button
+          onclick="sendMessage()"
+          style="
+            background: var(--primary);
+            border: none;
+            color: white;
+            width: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+          "
+        >
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
     </div>
 
     <script>
       const API_URL = "https://graphql.anilist.co";
 
-      // 1. Setup Slider
-      async function setupSlider() {
-        const query = `query { Page(perPage: 5) { media(type: ANIME, sort: TRENDING_DESC) { id title { romaji } description bannerImage coverImage { extraLarge } } } }`;
+      // Navigation & Loader
+      function showPage(pageId) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById(pageId).classList.add("active");
+        window.scrollTo(0, 0);
+
+        document.querySelectorAll(".nav-item").forEach((item) => {
+          item.classList.remove("active");
+          if (item.innerText.toLowerCase() === pageId.split("-")[0])
+            item.classList.add("active");
+        });
+      }
+
+      function toggleLoader(show) {
+        document.getElementById("loader").style.display = show
+          ? "block"
+          : "none";
+      }
+
+      // 1. Load Home
+      async function initHome() {
+        toggleLoader(true);
+        const query = `query { 
+          slider: Page(perPage: 5) { media(type: ANIME, sort: TRENDING_DESC) { id title { romaji } description bannerImage coverImage { extraLarge } } }
+          trending: Page(perPage: 12) { media(type: ANIME, sort: TRENDING_DESC) { id title { romaji } coverImage { large } } }
+        }`;
         const res = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query }),
         });
         const json = await res.json();
+
+        // Render Slider
         const slider = document.getElementById("hero-slider");
-
-        json.data.Page.media.forEach((anime, i) => {
-          const div = document.createElement("div");
-          div.className = `slide ${i === 0 ? "active" : ""}`;
-          div.style.backgroundImage = `url('${anime.bannerImage || anime.coverImage.extraLarge}')`;
-          div.innerHTML = `<div class="hero-content"><h1>${anime.title.romaji}</h1><p>${anime.description}</p><button class="btn btn-primary" onclick="openModal(${anime.id})">Tonton Sekarang</button></div>`;
-          slider.appendChild(div);
-        });
-        startAutoSlide();
-      }
-
-      // 2. Fetch List Anime
-      async function fetchAnime(sort, title) {
-        document.getElementById("content-title").innerText = title;
-        const query = `query($s:[MediaSort]){ Page(perPage:12){ media(type:ANIME, sort:$s){ id title{romaji} coverImage{large} } } }`;
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query, variables: { s: [sort] } }),
-        });
-        const json = await res.json();
-        displayAnime(json.data.Page.media);
-      }
-
-      function displayAnime(list) {
-        const container = document.getElementById("anime-list");
-        container.innerHTML = list
+        slider.innerHTML = json.data.slider.media
           .map(
-            (a) => `
-          <div class="anime-card" onclick="openModal(${a.id})">
-            <img src="${a.coverImage.large}">
-            <div class="card-info"><h3>${a.title.romaji}</h3></div>
+            (a, i) => `
+          <div class="slide ${i === 0 ? "active" : ""}" style="background-image: url('${a.bannerImage || a.coverImage.extraLarge}')">
+            <div class="hero-content">
+              <h1>${a.title.romaji}</h1>
+              <p style="margin: 15px 0; color: #ccc;">${a.description?.substring(0, 160)}...</p>
+              <button class="btn-play" onclick="loadDetail(${a.id})"><i class="fas fa-play"></i> Tonton</button>
+            </div>
           </div>
         `,
           )
           .join("");
+
+        // Render Trending
+        document.getElementById("trending-list").innerHTML =
+          json.data.trending.media
+            .map(
+              (a) => `
+          <div class="anime-card" onclick="loadDetail(${a.id})">
+            <img src="${a.coverImage.large}">
+            <div class="card-info"><h3>${a.title.romaji}</h3></div>
+          </div>
+        `,
+            )
+            .join("");
+
+        startAutoSlide();
+        toggleLoader(false);
       }
 
-      // 3. MODAL LOGIC (Halaman Putar)
-      async function openModal(id) {
-        const modal = document.getElementById("video-modal");
-        const content = document.getElementById("modal-content");
-        modal.classList.add("active");
-        content.innerHTML = "<h2>Memuat Detail...</h2>";
-
-        const query = `query($id:Int){
-          Media(id:$id){
-            title{romaji}
-            description
-            bannerImage
-            episodes
-            genres
-            recommendations(perPage:6){ nodes{ mediaRecommendation{ id title{romaji} coverImage{large} } } }
-          }
-        }`;
-
+      // 2. Load Detail
+      async function loadDetail(id) {
+        toggleLoader(true);
+        const query = `query($id:Int){ Media(id:$id){ title{romaji} description genres episodes recommendations(perPage:6){ nodes{ mediaRecommendation{ id title{romaji} coverImage{large} } } } } }`;
         const res = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query, variables: { id } }),
         });
         const json = await res.json();
-        const anime = json.data.Media;
+        const a = json.data.Media;
 
-        content.innerHTML = `
-          <div class="player-section">
-            <div class="video-area">
-              <div class="video-box">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
-              </div>
-              <div class="info-box" style="margin-top:20px">
-                <h2>${anime.title.romaji}</h2>
-                <p>${anime.description}</p>
-                <div style="display:flex; gap:10px; flex-wrap:wrap">
-                  ${anime.genres.map((g) => `<span style="background:var(--primary); padding:3px 10px; border-radius:15px; font-size:12px">${g}</span>`).join("")}
-                </div>
+        document.getElementById("detail-content").innerHTML = `
+          <div class="player-grid">
+            <div>
+              <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe></div>
+              <div style="margin-top:20px">
+                <h2>${a.title.romaji}</h2>
+                <div style="margin:10px 0">${a.genres.map((g) => `<span style="background:var(--primary); font-size:11px; padding:3px 10px; border-radius:20px; margin-right:5px">${g}</span>`).join("")}</div>
+                <p style="color:#aaa; font-size:14px; line-height:1.6">${a.description}</p>
               </div>
             </div>
-            <div class="playlist-area">
-              <h3>Daftar Episode</h3>
-              <div class="episode-list">
-                ${Array.from({ length: anime.episodes || 12 }, (_, i) => `<div class="ep-item">Episode ${i + 1}</div>`).join("")}
-              </div>
+            <div class="episodes-box">
+              <h3>Episode List</h3>
+              <div class="ep-list">${Array.from({ length: a.episodes || 12 }, (_, i) => `<div class="ep-item">Episode ${i + 1}</div>`).join("")}</div>
             </div>
           </div>
-
-          <div class="recommendation-section">
-            <h2 class="section-title">Rekomendasi Serupa</h2>
-            <div class="anime-grid">
-              ${anime.recommendations.nodes
-                .map((r) => {
-                  const rec = r.mediaRecommendation;
-                  return `
-                  <div class="anime-card" onclick="openModal(${rec.id})">
-                    <img src="${rec.coverImage.large}">
-                    <div class="card-info"><h3>${rec.title.romaji}</h3></div>
-                  </div>
-                `;
-                })
-                .join("")}
-            </div>
+          <div class="container">
+            <h2 class="section-title">Rekomendasi</h2>
+            <div class="anime-grid">${a.recommendations.nodes
+              .map(
+                (r) => `
+              <div class="anime-card" onclick="loadDetail(${r.mediaRecommendation.id})">
+                <img src="${r.mediaRecommendation.coverImage.large}">
+                <div class="card-info"><h3>${r.mediaRecommendation.title.romaji}</h3></div>
+              </div>`,
+              )
+              .join("")}</div>
           </div>
         `;
+        showPage("detail-page");
+        toggleLoader(false);
       }
 
-      function closeModal() {
-        document.getElementById("video-modal").classList.remove("active");
+      // 3. Category & Search
+      async function loadCategory(sort, title) {
+        toggleLoader(true);
+        const query = `query($s:[MediaSort]){ Page(perPage:18){ media(type:ANIME, sort:$s){ id title{romaji} coverImage{large} } } }`;
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query, variables: { s: [sort] } }),
+        });
+        const json = await res.json();
+        renderCategory(title, json.data.Page.media);
+      }
+
+      async function handleSearch(e) {
+        if (e.key === "Enter") {
+          toggleLoader(true);
+          const s = e.target.value;
+          const query = `query($s:String){ Page(perPage:18){ media(search:$s, type:ANIME){ id title{romaji} coverImage{large} } } }`;
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query, variables: { s } }),
+          });
+          const json = await res.json();
+          renderCategory(`Hasil: ${s}`, json.data.Page.media);
+        }
+      }
+
+      async function loadSchedule() {
+        toggleLoader(true);
+        const query = `query{ Page(perPage:18){ airingSchedules(airingAt_greater:${Math.floor(Date.now() / 1000)}, sort:TIME){ media{ id title{romaji} coverImage{large} } episode } } }`;
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        });
+        const json = await res.json();
+        const list = json.data.Page.airingSchedules.map((i) => ({
+          ...i.media,
+          episode: i.episode,
+        }));
+        renderCategory("Rilis Hari Ini", list);
+      }
+
+      function renderCategory(title, data) {
+        document.getElementById("category-title").innerText = title;
+        document.getElementById("category-list").innerHTML = data
+          .map(
+            (a) => `
+          <div class="anime-card" onclick="loadDetail(${a.id})">
+            <img src="${a.coverImage.large}">
+            <div class="card-info"><h3>${a.title.romaji}</h3> ${a.episode ? `<p style="color:var(--primary)">Eps ${a.episode}</p>` : ""}</div>
+          </div>
+        `,
+          )
+          .join("");
+        showPage("category-page");
+        toggleLoader(false);
+      }
+
+      // 4. Global Chat Logic
+      function toggleChat() {
+        const win = document.getElementById("chat-window");
+        win.style.display = win.style.display === "flex" ? "none" : "flex";
+      }
+
+      function sendMessage() {
+        const input = document.getElementById("chat-input");
+        const msgBox = document.getElementById("chat-messages");
+        if (input.value.trim()) {
+          const div = document.createElement("div");
+          div.className = "msg me";
+          div.innerText = input.value;
+          msgBox.appendChild(div);
+          input.value = "";
+          msgBox.scrollTop = msgBox.scrollHeight;
+
+          // Bot response simple
+          setTimeout(() => {
+            const botDiv = document.createElement("div");
+            botDiv.className = "msg";
+            botDiv.innerText =
+              "Keren! Ngomong-ngomong, sudah nonton episode terbaru minggu ini?";
+            msgBox.appendChild(botDiv);
+            msgBox.scrollTop = msgBox.scrollHeight;
+          }, 1000);
+        }
       }
 
       // Slider Logic
@@ -458,32 +649,14 @@
       function startAutoSlide() {
         setInterval(() => {
           const slides = document.querySelectorAll(".slide");
-          if (slides.length === 0) return;
+          if (slides.length < 2) return;
           slides[slideIdx].classList.remove("active");
           slideIdx = (slideIdx + 1) % slides.length;
           slides[slideIdx].classList.add("active");
-        }, 5000);
+        }, 6000);
       }
 
-      // Search & Others
-      async function handleSearch(e) {
-        if (e.key === "Enter") {
-          const s = e.target.value;
-          const query = `query($s:String){ Page(perPage:12){ media(search:$s, type:ANIME){ id title{romaji} coverImage{large} } } }`;
-          const res = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query, variables: { s } }),
-          });
-          const json = await res.json();
-          displayAnime(json.data.Page.media);
-        }
-      }
-
-      window.onload = () => {
-        setupSlider();
-        fetchAnime("TRENDING_DESC", "Sedang Tren");
-      };
+      window.onload = initHome;
     </script>
   </body>
 </html>
