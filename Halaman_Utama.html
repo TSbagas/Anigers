@@ -15,12 +15,11 @@
     />
 
     <style>
-      /* --- CSS STYLING (Tetap Sesuai Request) --- */
       :root {
         --primary: #8a2be2;
         --secondary: #4b0082;
-        --dark: #0f0f1a;
-        --card-bg: #1a1a2e;
+        --dark: #0a0a12;
+        --card-bg: #16162a;
         --text: #ffffff;
         --glass: rgba(255, 255, 255, 0.05);
       }
@@ -37,28 +36,29 @@
         overflow-x: hidden;
       }
 
+      /* Navbar */
       .navbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 20px 8%;
-        background: rgba(15, 15, 26, 0.95);
+        padding: 15px 8%;
+        background: rgba(10, 10, 18, 0.95);
         backdrop-filter: blur(10px);
         position: sticky;
         top: 0;
         z-index: 1000;
         border-bottom: 1px solid var(--glass);
       }
-
       .logo {
         font-size: 24px;
         font-weight: 600;
         cursor: pointer;
+        color: white;
+        text-decoration: none;
       }
       .logo span {
         color: var(--primary);
       }
-
       .nav-links {
         display: flex;
         gap: 25px;
@@ -71,8 +71,7 @@
         font-size: 14px;
         cursor: pointer;
       }
-      .nav-links a:hover,
-      .nav-links a.active {
+      .nav-links a:hover {
         color: var(--primary);
       }
 
@@ -80,219 +79,235 @@
         padding: 8px 18px;
         border-radius: 20px;
         border: 1px solid var(--glass);
-        background: #252545;
+        background: #1f1f3d;
         color: white;
         outline: none;
       }
 
-      .hero {
+      /* Hero Slider */
+      .hero-slider {
+        position: relative;
         height: 500px;
-        background:
-          linear-gradient(to right, rgba(15, 15, 26, 1), rgba(15, 15, 26, 0.2)),
-          url("https://images.alphacoders.com/131/1310162.jpeg");
+        width: 100%;
+        overflow: hidden;
+      }
+      .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: 0.8s ease;
         background-size: cover;
         background-position: center;
         display: flex;
         align-items: center;
         padding: 0 8%;
       }
-
+      .slide.active {
+        opacity: 1;
+        z-index: 1;
+      }
+      .slide::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to right, #0a0a12 10%, transparent 100%);
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 600px;
+      }
       .hero-content h1 {
-        font-size: 50px;
-        line-height: 1.2;
-        margin-bottom: 15px;
+        font-size: 36px;
+        margin-bottom: 10px;
       }
       .hero-content p {
         color: #ccc;
-        max-width: 500px;
-        margin-bottom: 25px;
+        font-size: 13px;
+        margin-bottom: 20px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
 
-      .btn-watch {
-        padding: 12px 35px;
-        background: var(--primary);
-        border: none;
-        color: white;
-        border-radius: 30px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: 0.3s;
-        box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
-      }
-      .btn-watch:hover {
-        background: var(--secondary);
-        transform: translateY(-3px);
-      }
-
+      /* Grid */
       .container {
-        padding: 50px 8%;
+        padding: 40px 8%;
       }
       .section-title {
-        margin-bottom: 30px;
-        border-left: 5px solid var(--primary);
+        margin-bottom: 25px;
+        border-left: 4px solid var(--primary);
         padding-left: 15px;
-        font-size: 24px;
+        font-size: 22px;
       }
-
       .anime-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 25px;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
       }
-
       .anime-card {
         background: var(--card-bg);
-        border-radius: 15px;
+        border-radius: 12px;
         overflow: hidden;
-        transition: 0.4s;
+        transition: 0.3s;
+        cursor: pointer;
         border: 1px solid var(--glass);
       }
       .anime-card:hover {
-        transform: scale(1.05);
+        transform: translateY(-5px);
         border-color: var(--primary);
       }
       .anime-card img {
         width: 100%;
-        height: 280px;
+        height: 250px;
         object-fit: cover;
       }
       .card-info {
-        padding: 15px;
+        padding: 12px;
       }
       .card-info h3 {
-        font-size: 15px;
-        margin-bottom: 5px;
+        font-size: 13px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      .card-info span {
-        font-size: 12px;
-        color: #8a2be2;
-        font-weight: bold;
-      }
 
-      /* Chat UI */
-      .chat-launcher {
+      /* MODAL DETAIL (Halaman Putar) */
+      .modal {
         position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 65px;
-        height: 65px;
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        font-size: 26px;
-        cursor: pointer;
-        z-index: 1001;
-        transition: 0.4s;
-      }
-      .chat-window {
-        position: fixed;
-        bottom: 110px;
-        right: 30px;
-        width: 350px;
-        height: 480px;
-        background: #16162a;
-        border-radius: 20px;
-        display: flex;
-        flex-direction: column;
-        z-index: 1000;
-        border: 1px solid var(--glass);
-        transition: 0.3s ease;
-        transform-origin: bottom right;
-      }
-      .chat-window.hidden {
-        opacity: 0;
-        transform: scale(0.5) translateY(100px);
-        pointer-events: none;
-      }
-      .chat-header {
-        padding: 20px;
-        background: #1f1f3d;
-        display: flex;
-        justify-content: space-between;
-        border-radius: 20px 20px 0 0;
-      }
-      .chat-body {
-        flex: 1;
-        padding: 20px;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 2000;
+        display: none;
         overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
+        padding: 40px 8%;
       }
-      .message {
-        font-size: 13px;
-        background: var(--glass);
-        padding: 10px;
-        border-radius: 10px;
-        max-width: 80%;
-      }
-      .username {
+      .modal.active {
         display: block;
-        font-weight: bold;
-        color: var(--primary);
-        font-size: 11px;
       }
-      .chat-footer {
-        padding: 15px;
-        display: flex;
-        gap: 10px;
-        background: #1f1f3d;
-        border-radius: 0 0 20px 20px;
-      }
-      .chat-footer input {
-        flex: 1;
-        background: #252545;
-        border: none;
-        padding: 12px;
-        border-radius: 10px;
-        color: white;
-        outline: none;
-      }
-      .chat-footer button {
-        background: var(--primary);
-        border: none;
-        color: white;
-        width: 45px;
-        border-radius: 10px;
+      .close-modal {
+        position: fixed;
+        top: 20px;
+        right: 40px;
+        font-size: 30px;
         cursor: pointer;
+        z-index: 2001;
       }
 
-      ::-webkit-scrollbar {
-        width: 5px;
+      .player-section {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
       }
-      ::-webkit-scrollbar-thumb {
-        background: var(--primary);
+      .video-box {
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #000;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid var(--glass);
+      }
+      .video-box iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .info-box h2 {
+        margin-bottom: 15px;
+        color: var(--primary);
+      }
+      .info-box p {
+        font-size: 14px;
+        color: #bbb;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .episode-list {
+        background: #16162a;
         border-radius: 10px;
+        padding: 15px;
+        height: 300px;
+        overflow-y: auto;
+      }
+      .ep-item {
+        padding: 10px;
+        border-bottom: 1px solid var(--glass);
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 14px;
+      }
+      .ep-item:hover {
+        background: var(--primary);
+        color: white;
+      }
+
+      .recommendation-section {
+        margin-top: 50px;
+      }
+
+      .btn {
+        padding: 10px 25px;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .slider-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        gap: 8px;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .dot.active {
+        background: var(--primary);
+        width: 25px;
+        border-radius: 5px;
+      }
+
+      @media (max-width: 900px) {
+        .player-section {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body>
     <nav class="navbar">
-      <div class="logo" onclick="fetchAnime('TRENDING_DESC', 'Sedang Tren')">
-        Anime<span>Verse</span>
-      </div>
+      <a class="logo" href="/">Anime<span>Verse</span></a>
       <ul class="nav-links">
+        <li><a onclick="fetchAnime('TRENDING_DESC', 'Beranda')">Home</a></li>
         <li>
-          <a onclick="fetchAnime('TRENDING_DESC', 'Beranda')"
-            ><i class="fas fa-home"></i> Home</a
-          >
+          <a onclick="fetchAnime('POPULARITY_DESC', 'Populer')">Populer</a>
         </li>
-        <li>
-          <a onclick="fetchAnime('POPULARITY_DESC', 'Paling Populer')"
-            ><i class="fas fa-fire"></i> Populer</a
-          >
-        </li>
-        <li>
-          <a onclick="fetchSchedule()"
-            ><i class="fas fa-calendar-alt"></i> Jadwal</a
-          >
-        </li>
+        <li><a onclick="fetchSchedule()">Jadwal</a></li>
       </ul>
       <div class="search-bar">
         <input
@@ -304,197 +319,171 @@
       </div>
     </nav>
 
-    <header class="hero">
-      <div class="hero-content">
-        <h1 id="hero-title">Solo Leveling: <br />Ragnarok</h1>
-        <p id="hero-desc">
-          Dunia telah berubah, dan level harus terus ditingkatkan. Saksikan
-          kembalinya sang Hunter terkuat di musim terbaru.
-        </p>
-        <button class="btn-watch">
-          <i class="fas fa-play"></i> Mulai Menonton
-        </button>
-      </div>
-    </header>
+    <header class="hero-slider" id="hero-slider"></header>
 
     <main class="container">
-      <h2 class="section-title" id="content-title">Sedang Tren di AniList</h2>
-      <div class="anime-grid" id="anime-list">
-        <p>Memuat anime...</p>
-      </div>
+      <h2 class="section-title" id="content-title">Sedang Tren</h2>
+      <div class="anime-grid" id="anime-list"></div>
     </main>
 
-    <div id="chat-launcher" class="chat-launcher" onclick="toggleChat()">
-      <i class="fas fa-comment-dots"></i>
-    </div>
-    <div id="chat-window" class="chat-window hidden">
-      <div class="chat-header">
-        <div class="online-status">
-          <div
-            class="dot"
-            style="
-              width: 8px;
-              height: 8px;
-              background: #00ff88;
-              border-radius: 50%;
-            "
-          ></div>
-          <span>Global Chat</span>
-        </div>
-        <i
-          class="fas fa-times"
-          onclick="toggleChat()"
-          style="cursor: pointer"
-        ></i>
-      </div>
-      <div class="chat-body" id="chat-messages">
-        <div class="message">
-          <span class="username">SYSTEM</span>Selamat datang di komunitas
-          AnimeVerse!
-        </div>
-      </div>
-      <div class="chat-footer">
-        <input type="text" id="chat-input" placeholder="Ketik pesan..." />
-        <button onclick="sendMessage()">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      </div>
+    <div id="video-modal" class="modal">
+      <span class="close-modal" onclick="closeModal()">&times;</span>
+      <div id="modal-content"></div>
     </div>
 
     <script>
       const API_URL = "https://graphql.anilist.co";
 
-      // Fungsi Ambil Data Umum (Home & Populer)
-      async function fetchAnime(sortType, title) {
-        document.getElementById("content-title").innerText = title;
-        const query = `
-          query ($sort: [MediaSort]) {
-            Page(perPage: 12) {
-              media(type: ANIME, sort: $sort) {
-                id
-                title { romaji }
-                coverImage { large }
-                nextAiringEpisode { episode }
-                status
-              }
-            }
-          }`;
+      // 1. Setup Slider
+      async function setupSlider() {
+        const query = `query { Page(perPage: 5) { media(type: ANIME, sort: TRENDING_DESC) { id title { romaji } description bannerImage coverImage { extraLarge } } } }`;
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        });
+        const json = await res.json();
+        const slider = document.getElementById("hero-slider");
 
-        const variables = { sort: [sortType] };
-        await callAniList(query, variables);
+        json.data.Page.media.forEach((anime, i) => {
+          const div = document.createElement("div");
+          div.className = `slide ${i === 0 ? "active" : ""}`;
+          div.style.backgroundImage = `url('${anime.bannerImage || anime.coverImage.extraLarge}')`;
+          div.innerHTML = `<div class="hero-content"><h1>${anime.title.romaji}</h1><p>${anime.description}</p><button class="btn btn-primary" onclick="openModal(${anime.id})">Tonton Sekarang</button></div>`;
+          slider.appendChild(div);
+        });
+        startAutoSlide();
       }
 
-      // Fungsi Search
+      // 2. Fetch List Anime
+      async function fetchAnime(sort, title) {
+        document.getElementById("content-title").innerText = title;
+        const query = `query($s:[MediaSort]){ Page(perPage:12){ media(type:ANIME, sort:$s){ id title{romaji} coverImage{large} } } }`;
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query, variables: { s: [sort] } }),
+        });
+        const json = await res.json();
+        displayAnime(json.data.Page.media);
+      }
+
+      function displayAnime(list) {
+        const container = document.getElementById("anime-list");
+        container.innerHTML = list
+          .map(
+            (a) => `
+          <div class="anime-card" onclick="openModal(${a.id})">
+            <img src="${a.coverImage.large}">
+            <div class="card-info"><h3>${a.title.romaji}</h3></div>
+          </div>
+        `,
+          )
+          .join("");
+      }
+
+      // 3. MODAL LOGIC (Halaman Putar)
+      async function openModal(id) {
+        const modal = document.getElementById("video-modal");
+        const content = document.getElementById("modal-content");
+        modal.classList.add("active");
+        content.innerHTML = "<h2>Memuat Detail...</h2>";
+
+        const query = `query($id:Int){
+          Media(id:$id){
+            title{romaji}
+            description
+            bannerImage
+            episodes
+            genres
+            recommendations(perPage:6){ nodes{ mediaRecommendation{ id title{romaji} coverImage{large} } } }
+          }
+        }`;
+
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query, variables: { id } }),
+        });
+        const json = await res.json();
+        const anime = json.data.Media;
+
+        content.innerHTML = `
+          <div class="player-section">
+            <div class="video-area">
+              <div class="video-box">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+              </div>
+              <div class="info-box" style="margin-top:20px">
+                <h2>${anime.title.romaji}</h2>
+                <p>${anime.description}</p>
+                <div style="display:flex; gap:10px; flex-wrap:wrap">
+                  ${anime.genres.map((g) => `<span style="background:var(--primary); padding:3px 10px; border-radius:15px; font-size:12px">${g}</span>`).join("")}
+                </div>
+              </div>
+            </div>
+            <div class="playlist-area">
+              <h3>Daftar Episode</h3>
+              <div class="episode-list">
+                ${Array.from({ length: anime.episodes || 12 }, (_, i) => `<div class="ep-item">Episode ${i + 1}</div>`).join("")}
+              </div>
+            </div>
+          </div>
+
+          <div class="recommendation-section">
+            <h2 class="section-title">Rekomendasi Serupa</h2>
+            <div class="anime-grid">
+              ${anime.recommendations.nodes
+                .map((r) => {
+                  const rec = r.mediaRecommendation;
+                  return `
+                  <div class="anime-card" onclick="openModal(${rec.id})">
+                    <img src="${rec.coverImage.large}">
+                    <div class="card-info"><h3>${rec.title.romaji}</h3></div>
+                  </div>
+                `;
+                })
+                .join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      function closeModal() {
+        document.getElementById("video-modal").classList.remove("active");
+      }
+
+      // Slider Logic
+      let slideIdx = 0;
+      function startAutoSlide() {
+        setInterval(() => {
+          const slides = document.querySelectorAll(".slide");
+          if (slides.length === 0) return;
+          slides[slideIdx].classList.remove("active");
+          slideIdx = (slideIdx + 1) % slides.length;
+          slides[slideIdx].classList.add("active");
+        }, 5000);
+      }
+
+      // Search & Others
       async function handleSearch(e) {
         if (e.key === "Enter") {
-          const keyword = e.target.value;
-          document.getElementById("content-title").innerText =
-            `Hasil pencarian: ${keyword}`;
-          const query = `
-            query ($search: String) {
-              Page(perPage: 12) {
-                media(type: ANIME, search: $search) {
-                  id
-                  title { romaji }
-                  coverImage { large }
-                  status
-                }
-              }
-            }`;
-          const variables = { search: keyword };
-          await callAniList(query, variables);
-        }
-      }
-
-      // Fungsi Jadwal (Airing Today)
-      async function fetchSchedule() {
-        document.getElementById("content-title").innerText =
-          "Jadwal Rilis Hari Ini";
-        const query = `
-          query {
-            Page(perPage: 12) {
-              airingSchedules(airingAt_greater: ${Math.floor(Date.now() / 1000)}, sort: TIME) {
-                media {
-                  title { romaji }
-                  coverImage { large }
-                }
-                episode
-              }
-            }
-          }`;
-
-        try {
-          const response = await fetch(API_URL, {
+          const s = e.target.value;
+          const query = `query($s:String){ Page(perPage:12){ media(search:$s, type:ANIME){ id title{romaji} coverImage{large} } } }`;
+          const res = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query }),
+            body: JSON.stringify({ query, variables: { s } }),
           });
-          const json = await response.json();
-          const list = json.data.Page.airingSchedules.map((item) => ({
-            ...item.media,
-            nextAiringEpisode: { episode: item.episode },
-          }));
-          displayAnime(list);
-        } catch (err) {
-          console.error(err);
-        }
-      }
-
-      // Helper Call API
-      async function callAniList(query, variables) {
-        try {
-          const response = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query, variables }),
-          });
-          const json = await response.json();
+          const json = await res.json();
           displayAnime(json.data.Page.media);
-        } catch (err) {
-          document.getElementById("anime-list").innerHTML =
-            "<p>Gagal memuat data.</p>";
         }
       }
 
-      function displayAnime(animeList) {
-        const container = document.getElementById("anime-list");
-        container.innerHTML = "";
-        animeList.forEach((anime) => {
-          const info = anime.nextAiringEpisode
-            ? `Eps ${anime.nextAiringEpisode.episode}`
-            : anime.status || "";
-          container.innerHTML += `
-            <div class="anime-card">
-              <img src="${anime.coverImage.large}" alt="cover">
-              <div class="card-info">
-                <h3>${anime.title.romaji}</h3>
-                <span>${info}</span>
-              </div>
-            </div>`;
-        });
-      }
-
-      // Chat Functions
-      function toggleChat() {
-        const win = document.getElementById("chat-window");
-        const launch = document.getElementById("chat-launcher");
-        win.classList.toggle("hidden");
-        launch.style.opacity = win.classList.contains("hidden") ? "1" : "0";
-      }
-
-      function sendMessage() {
-        const input = document.getElementById("chat-input");
-        if (input.value.trim()) {
-          const body = document.getElementById("chat-messages");
-          body.innerHTML += `<div class="message"><span class="username">Kamu</span>${input.value}</div>`;
-          input.value = "";
-          body.scrollTop = body.scrollHeight;
-        }
-      }
-
-      // Load Default
-      window.onload = () =>
-        fetchAnime("TRENDING_DESC", "Sedang Tren di AniList");
+      window.onload = () => {
+        setupSlider();
+        fetchAnime("TRENDING_DESC", "Sedang Tren");
+      };
     </script>
   </body>
 </html>
