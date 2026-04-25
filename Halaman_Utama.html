@@ -32,7 +32,7 @@
         line-height: 1.6;
       }
 
-      /* Custom Scrollbar */
+      /* Scrollbar */
       ::-webkit-scrollbar {
         width: 8px;
       }
@@ -119,9 +119,9 @@
         display: block;
       }
 
-      /* Hero Slider */
+      /* Hero Slider Premium */
       #hero-slider {
-        height: 480px;
+        height: 500px;
         border-radius: 25px;
         overflow: hidden;
         position: relative;
@@ -146,22 +146,57 @@
         inset: 0;
         background: linear-gradient(
           to right,
-          rgba(10, 10, 18, 1) 10%,
-          rgba(10, 10, 18, 0.2) 60%,
+          rgba(10, 10, 18, 1) 15%,
+          rgba(10, 10, 18, 0.3) 60%,
           rgba(10, 10, 18, 0.8)
         );
       }
+
       .hero-content {
         position: relative;
         max-width: 650px;
         z-index: 2;
       }
       .hero-content h1 {
-        font-size: 42px;
-        margin-bottom: 15px;
+        font-size: 52px;
+        font-weight: 900;
+        margin-bottom: 10px;
+        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+        line-height: 1.1;
+      }
+      .hero-content p {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 25px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
 
-      /* Anime Cards Style */
+      .btn-play {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 15px 35px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 800;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: 0.4s;
+        box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);
+        text-transform: uppercase;
+      }
+      .btn-play:hover {
+        transform: translateY(-3px) scale(1.05);
+        background: #a04ef5;
+        box-shadow: 0 12px 25px rgba(138, 43, 226, 0.5);
+      }
+
+      /* Anime Cards */
       .anime-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -174,7 +209,6 @@
       .anime-card:hover {
         transform: translateY(-10px);
       }
-
       .card-image-wrapper {
         position: relative;
         width: 100%;
@@ -188,7 +222,6 @@
         height: 100%;
         object-fit: cover;
       }
-
       .badge-hot {
         position: absolute;
         top: 10px;
@@ -227,17 +260,92 @@
         font-size: 12px;
         border: 1px solid rgba(255, 255, 255, 0.1);
       }
-
-      .card-info {
-        padding: 12px 5px;
-      }
       .card-info h3 {
         font-size: 14px;
-        font-weight: 700;
-        color: white;
+        padding: 12px 5px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      /* Global Chat */
+      #chat-container {
+        position: fixed;
+        right: -320px;
+        bottom: 0;
+        width: 320px;
+        height: 100vh;
+        background: var(--card-bg);
+        border-left: 1px solid var(--glass-heavy);
+        z-index: 2000;
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      }
+      #chat-container.open {
+        right: 0;
+      }
+      .chat-toggle {
+        position: absolute;
+        left: -50px;
+        bottom: 20px;
+        width: 50px;
+        height: 50px;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px 0 0 15px;
+        cursor: pointer;
+        color: white;
+      }
+      .chat-header {
+        padding: 20px;
+        border-bottom: 1px solid var(--glass);
+        font-weight: 800;
+      }
+      #chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .msg {
+        background: var(--glass);
+        padding: 10px;
+        border-radius: 12px;
+        font-size: 13px;
+      }
+      .msg b {
+        color: var(--primary);
+        display: block;
+        font-size: 11px;
+      }
+      .chat-input {
+        padding: 15px;
+        display: flex;
+        gap: 8px;
+        background: rgba(0, 0, 0, 0.2);
+      }
+      .chat-input input {
+        flex: 1;
+        background: var(--glass);
+        border: 1px solid var(--glass-heavy);
+        border-radius: 8px;
+        padding: 10px;
+        color: white;
+        outline: none;
+      }
+      .chat-input button {
+        background: var(--primary);
+        border: none;
+        width: 40px;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
       }
 
       /* Detail Page */
@@ -281,21 +389,17 @@
         transition: 0.3s;
         display: flex;
         justify-content: space-between;
-        align-items: center;
       }
       .ep-item:hover {
         background: var(--primary);
-        color: white;
       }
 
-      /* Section Title */
       .sec-title {
         margin: 40px 0 25px;
         font-weight: 800;
         display: flex;
         align-items: center;
         gap: 12px;
-        font-size: 20px;
       }
       .sec-title span {
         width: 5px;
@@ -304,7 +408,6 @@
         border-radius: 10px;
       }
 
-      /* Loader */
       #loader {
         position: fixed;
         inset: 0;
@@ -337,10 +440,13 @@
           opacity: 1;
         }
       }
-
       @media (max-width: 900px) {
         .player-grid {
           grid-template-columns: 1fr;
+        }
+        #chat-container {
+          width: 100%;
+          right: -100%;
         }
       }
     </style>
@@ -404,6 +510,30 @@
       </div>
     </div>
 
+    <div id="chat-container">
+      <div
+        class="chat-toggle"
+        onclick="
+          document.getElementById('chat-container').classList.toggle('open')
+        "
+      >
+        <i class="fas fa-comments"></i>
+      </div>
+      <div class="chat-header">CHAT GLOBAL</div>
+      <div id="chat-messages">
+        <div class="msg"><b>Sistem</b>Selamat datang di Aniger!</div>
+      </div>
+      <div class="chat-input">
+        <input
+          type="text"
+          id="msgInput"
+          placeholder="Ketik pesan..."
+          onkeypress="if (event.key == 'Enter') sendChat();"
+        />
+        <button onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+
     <script>
       const API_URL = "https://graphql.anilist.co";
 
@@ -459,7 +589,8 @@
                     <div class="slide ${i === 0 ? "active" : ""}" style="background-image: url('${a.bannerImage || a.coverImage.extraLarge}')">
                         <div class="hero-content">
                             <h1>${a.title.romaji}</h1>
-                            <button class="btn-play" onclick="loadDetail(${a.id})"><i class="fas fa-play"></i> Tonton</button>
+                            <p>${a.description ? a.description.replace(/<\/?[^>]+(>|$)/g, "") : "Tonton anime seru ini sekarang di Aniger."}</p>
+                            <button class="btn-play" onclick="loadDetail(${a.id})"><i class="fas fa-play-circle"></i> MULAI NONTON</button>
                         </div>
                     </div>
                 `,
@@ -492,7 +623,7 @@
 
       async function loadDetail(id) {
         toggleLoader(true);
-        const q = `query($id:Int){ Media(id:$id){ title{romaji} description genres episodes averageScore recommendations(perPage:6){ nodes{ mediaRecommendation{ id title{romaji} averageScore coverImage{large} } } } } }`;
+        const q = `query($id:Int){ Media(id:$id){ id title{romaji} description genres episodes averageScore recommendations(perPage:6){ nodes{ mediaRecommendation{ id title{romaji} averageScore coverImage{large} } } } } }`;
         try {
           const r = await fetch(API_URL, {
             method: "POST",
@@ -509,8 +640,14 @@
                             <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe></div>
                             <div class="info-box">
                                 <h1>${a.title.romaji}</h1>
-                                <div style="margin:10px 0; display:flex; gap:10px; flex-wrap:wrap;">
-                                    ${a.genres.map((g) => `<span style="background:var(--primary); font-size:11px; padding:3px 12px; border-radius:20px;">${g}</span>`).join("")}
+                                <div style="margin:10px 0; display:flex; gap:10px;">
+                                    ${a.genres
+                                      .slice(0, 3)
+                                      .map(
+                                        (g) =>
+                                          `<span style="background:var(--primary); font-size:11px; padding:3px 12px; border-radius:20px;">${g}</span>`,
+                                      )
+                                      .join("")}
                                 </div>
                                 <p style="color:#bbb; font-size:14px; margin-top:15px;">${sinopsis}</p>
                             </div>
@@ -522,7 +659,6 @@
                     </div>
                 `;
 
-          // Render Rekomendasi
           document.getElementById("recommendation-list").innerHTML =
             a.recommendations.nodes
               .map((n) => {
@@ -632,6 +768,19 @@
           } finally {
             toggleLoader(false);
           }
+        }
+      }
+
+      function sendChat() {
+        const input = document.getElementById("msgInput");
+        if (input.value.trim() !== "") {
+          const chatBox = document.getElementById("chat-messages");
+          const div = document.createElement("div");
+          div.className = "msg";
+          div.innerHTML = `<b>User_${Math.floor(Math.random() * 999)}</b>${input.value}`;
+          chatBox.appendChild(div);
+          input.value = "";
+          chatBox.scrollTop = chatBox.scrollHeight;
         }
       }
 
