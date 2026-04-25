@@ -2,17 +2,28 @@ const API_URL = "https://graphql.anilist.co";
 let slideIdx = 0;
 let slideTimer;
 
-function showPage(p) {
-  document
-    .querySelectorAll(".page")
-    .forEach((x) => x.classList.remove("active"));
-  document.getElementById(p).classList.add("active");
+function showPage(pageId) {
+  // 1. Sembunyikan semua halaman
+  document.querySelectorAll(".page").forEach((page) => {
+    page.classList.remove("active");
+  });
+
+  // 2. Tampilkan halaman yang dituju
+  const targetPage = document.getElementById(pageId);
+  if (targetPage) {
+    targetPage.classList.add("active");
+  }
+
+  // 3. Reset Scroll ke atas
   window.scrollTo({ top: 0, behavior: "smooth" });
-  document
-    .querySelectorAll(".nav-item")
-    .forEach((n) => n.classList.remove("active"));
-  if (p === "home-page")
-    document.getElementById("m-home").classList.add("active");
+
+  // 4. KHUSUS: Jika balik ke Home, jalankan ulang slider agar tidak freeze atau numpuk
+  if (pageId === "home-page") {
+    startAutoSlide();
+  } else {
+    // Hentikan timer slider jika tidak di home untuk hemat memori
+    clearInterval(slideTimer);
+  }
 }
 
 function toggleLoader(s) {
@@ -120,6 +131,7 @@ async function loadDetail(id) {
                 <div class="info-box" style="margin-top:0">
                     <h3>Episode</h3>
                     <div class="ep-list">${Array.from({ length: a.episodes || 12 }, (_, i) => `<div class="ep-item">Eps ${i + 1} <i class="fas fa-play"></i></div>`).join("")}</div>
+
                 </div>
             </div>
         `;
@@ -255,6 +267,46 @@ function startAutoSlide() {
     slideIdx = (slideIdx + 1) % s.length;
     s[slideIdx].classList.add("active");
   }, 5000);
+}
+
+let totalComments = 0;
+
+function showActions() {
+  document.getElementById("comment-actions").style.display = "flex";
+}
+
+function hideActions() {
+  document.getElementById("comment-actions").style.display = "none";
+  document.getElementById("animeInput").value = "";
+}
+
+function postDetailComment() {
+  const input = document.getElementById("animeInput");
+  const container = document.getElementById("detail-comments-list");
+  const countLabel = document.getElementById("commentCount");
+
+  if (input.value.trim() !== "") {
+    const div = document.createElement("div");
+    div.className = "minimal-item";
+
+    const user = "User_" + Math.floor(Math.random() * 999);
+
+    div.innerHTML = `
+            <div class="avatar-sm" style="background: hsl(${Math.random() * 360}, 50%, 50%)"></div>
+            <div class="comment-info">
+                <b>${user}</b> <span>Baru saja</span>
+                <p>${input.value}</p>
+            </div>
+        `;
+
+    container.insertBefore(div, container.firstChild);
+
+    totalComments++;
+    countLabel.innerText = totalComments;
+
+    input.value = "";
+    hideActions();
+  }
 }
 
 window.onload = initHome;

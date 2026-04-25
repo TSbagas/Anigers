@@ -8,6 +8,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/webtorrent@latest/webtorrent.min.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -53,7 +54,45 @@
           <i class="fas fa-arrow-left"></i> Kembali
         </button>
         <div id="detail-content"></div>
+        <div class="detail-comment-wrapper">
+          <div class="comment-header">
+            <h3 class="sec-title"><span></span>DISKUSI ANIME</h3>
+            <span class="comment-count" id="commentCount">0 Komentar</span>
+          </div>
+
+          <div class="detail-comment-input">
+            <div class="user-avatar">
+              <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="input-group">
+              <textarea
+                id="animeInput"
+                placeholder="Tulis komentar kamu..."
+                rows="1"
+              ></textarea>
+              <button onclick="postDetailComment()">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+
+          <div id="detail-comments-list">
+            <div class="empty-msg">
+              <i
+                class="fas fa-comments"
+                style="
+                  display: block;
+                  font-size: 30px;
+                  margin-bottom: 10px;
+                  opacity: 0.5;
+                "
+              ></i>
+              Belum ada komentar di anime ini.
+            </div>
+          </div>
+        </div>
         <h2 class="sec-title"><span></span>ANIME SERUPA</h2>
+
         <div id="recommendation-list" class="anime-grid"></div>
       </div>
     </div>
