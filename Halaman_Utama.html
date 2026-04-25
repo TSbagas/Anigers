@@ -15,7 +15,7 @@
     />
 
     <style>
-      /* --- CSS STYLING --- */
+      /* --- CSS STYLING (Tetap Sesuai Request) --- */
       :root {
         --primary: #8a2be2;
         --secondary: #4b0082;
@@ -31,14 +31,12 @@
         box-sizing: border-box;
         font-family: "Poppins", sans-serif;
       }
-
       body {
         background-color: var(--dark);
         color: var(--text);
         overflow-x: hidden;
       }
 
-      /* Navbar */
       .navbar {
         display: flex;
         justify-content: space-between;
@@ -71,8 +69,10 @@
         color: #ccc;
         transition: 0.3s;
         font-size: 14px;
+        cursor: pointer;
       }
-      .nav-links a:hover {
+      .nav-links a:hover,
+      .nav-links a.active {
         color: var(--primary);
       }
 
@@ -85,7 +85,6 @@
         outline: none;
       }
 
-      /* Hero Section */
       .hero {
         height: 500px;
         background:
@@ -125,7 +124,6 @@
         transform: translateY(-3px);
       }
 
-      /* Anime Grid */
       .container {
         padding: 50px 8%;
       }
@@ -149,7 +147,6 @@
         transition: 0.4s;
         border: 1px solid var(--glass);
       }
-
       .anime-card:hover {
         transform: scale(1.05);
         border-color: var(--primary);
@@ -159,7 +156,6 @@
         height: 280px;
         object-fit: cover;
       }
-
       .card-info {
         padding: 15px;
       }
@@ -176,7 +172,7 @@
         font-weight: bold;
       }
 
-      /* --- GLOBAL CHAT SYSTEM --- */
+      /* Chat UI */
       .chat-launcher {
         position: fixed;
         bottom: 30px;
@@ -191,15 +187,9 @@
         color: white;
         font-size: 26px;
         cursor: pointer;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         z-index: 1001;
-        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: 0.4s;
       }
-
-      .chat-launcher:hover {
-        transform: scale(1.1) rotate(10deg);
-      }
-
       .chat-window {
         position: fixed;
         bottom: 110px;
@@ -210,43 +200,23 @@
         border-radius: 20px;
         display: flex;
         flex-direction: column;
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
         z-index: 1000;
         border: 1px solid var(--glass);
         transition: 0.3s ease;
         transform-origin: bottom right;
       }
-
       .chat-window.hidden {
         opacity: 0;
         transform: scale(0.5) translateY(100px);
         pointer-events: none;
       }
-
       .chat-header {
         padding: 20px;
         background: #1f1f3d;
         display: flex;
         justify-content: space-between;
-        align-items: center;
         border-radius: 20px 20px 0 0;
       }
-
-      .online-status {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 600;
-        font-size: 14px;
-      }
-      .dot {
-        width: 8px;
-        height: 8px;
-        background: #00ff88;
-        border-radius: 50%;
-        box-shadow: 0 0 10px #00ff88;
-      }
-
       .chat-body {
         flex: 1;
         padding: 20px;
@@ -255,26 +225,19 @@
         flex-direction: column;
         gap: 15px;
       }
-
       .message {
         font-size: 13px;
         background: var(--glass);
         padding: 10px;
         border-radius: 10px;
-        width: fit-content;
         max-width: 80%;
-      }
-      .message.admin {
-        border-left: 3px solid var(--primary);
       }
       .username {
         display: block;
         font-weight: bold;
         color: var(--primary);
         font-size: 11px;
-        margin-bottom: 2px;
       }
-
       .chat-footer {
         padding: 15px;
         display: flex;
@@ -282,7 +245,6 @@
         background: #1f1f3d;
         border-radius: 0 0 20px 20px;
       }
-
       .chat-footer input {
         flex: 1;
         background: #252545;
@@ -292,7 +254,6 @@
         color: white;
         outline: none;
       }
-
       .chat-footer button {
         background: var(--primary);
         border: none;
@@ -300,14 +261,8 @@
         width: 45px;
         border-radius: 10px;
         cursor: pointer;
-        transition: 0.3s;
       }
 
-      .chat-footer button:hover {
-        background: var(--secondary);
-      }
-
-      /* Scrollbar Styling */
       ::-webkit-scrollbar {
         width: 5px;
       }
@@ -319,27 +274,40 @@
   </head>
   <body>
     <nav class="navbar">
-      <div class="logo">Anime<span>Verse</span></div>
+      <div class="logo" onclick="fetchAnime('TRENDING_DESC', 'Sedang Tren')">
+        Anime<span>Verse</span>
+      </div>
       <ul class="nav-links">
         <li>
-          <a href="#"><i class="fas fa-home"></i> Home</a>
+          <a onclick="fetchAnime('TRENDING_DESC', 'Beranda')"
+            ><i class="fas fa-home"></i> Home</a
+          >
         </li>
         <li>
-          <a href="#"><i class="fas fa-fire"></i> Populer</a>
+          <a onclick="fetchAnime('POPULARITY_DESC', 'Paling Populer')"
+            ><i class="fas fa-fire"></i> Populer</a
+          >
         </li>
         <li>
-          <a href="#"><i class="fas fa-calendar-alt"></i> Jadwal</a>
+          <a onclick="fetchSchedule()"
+            ><i class="fas fa-calendar-alt"></i> Jadwal</a
+          >
         </li>
       </ul>
       <div class="search-bar">
-        <input type="text" placeholder="Cari anime favorit..." />
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Cari anime..."
+          onkeypress="handleSearch(event)"
+        />
       </div>
     </nav>
 
     <header class="hero">
       <div class="hero-content">
-        <h1>Solo Leveling: <br />Ragnarok</h1>
-        <p>
+        <h1 id="hero-title">Solo Leveling: <br />Ragnarok</h1>
+        <p id="hero-desc">
           Dunia telah berubah, dan level harus terus ditingkatkan. Saksikan
           kembalinya sang Hunter terkuat di musim terbaru.
         </p>
@@ -350,83 +318,41 @@
     </header>
 
     <main class="container">
-      <h2 class="section-title">Sedang Tren</h2>
-      <div class="anime-grid">
-        <div class="anime-card">
-          <img
-            src="https://m.media-amazon.com/images/M/MV5BODcwN2EwMzgtMzU0MS00MzAyLWI2Y2EtNjI3MWY0ZWFiMTJlXkEyXkFqcGdeQXVyMTA3MDk2NDg2._V1_.jpg"
-            alt="One Piece"
-          />
-          <div class="card-info">
-            <h3>One Piece</h3>
-            <span>Episode 1115</span>
-          </div>
-        </div>
-        <div class="anime-card">
-          <img
-            src="https://m.media-amazon.com/images/I/81S7H-h+N6L._AC_UF1000,1000_QL80_.jpg"
-            alt="Jujutsu Kaisen"
-          />
-          <div class="card-info">
-            <h3>Jujutsu Kaisen</h3>
-            <span>S2 Finished</span>
-          </div>
-        </div>
-        <div class="anime-card">
-          <img
-            src="https://static.tvtropes.org/pmwiki/pub/images/frieren_beyond_journeys_end_anime_visual.jpg"
-            alt="Frieren"
-          />
-          <div class="card-info">
-            <h3>Frieren: Beyond Journey's End</h3>
-            <span>Episode 28</span>
-          </div>
-        </div>
-        <div class="anime-card">
-          <img
-            src="https://m.media-amazon.com/images/M/MV5BMGIzZjdjZGYtN2I3Yy00MGQ0LWFjY2ItYWRkYjc1N2ZkZDAyXkEyXkFqcGdeQXVyMTA3MDk2NDg2._V1_.jpg"
-            alt="Kaiju No 8"
-          />
-          <div class="card-info">
-            <h3>Kaiju No. 8</h3>
-            <span>Episode 08</span>
-          </div>
-        </div>
+      <h2 class="section-title" id="content-title">Sedang Tren di AniList</h2>
+      <div class="anime-grid" id="anime-list">
+        <p>Memuat anime...</p>
       </div>
     </main>
 
     <div id="chat-launcher" class="chat-launcher" onclick="toggleChat()">
       <i class="fas fa-comment-dots"></i>
     </div>
-
     <div id="chat-window" class="chat-window hidden">
       <div class="chat-header">
         <div class="online-status">
-          <div class="dot"></div>
-          <span>Global Chat (2,481)</span>
+          <div
+            class="dot"
+            style="
+              width: 8px;
+              height: 8px;
+              background: #00ff88;
+              border-radius: 50%;
+            "
+          ></div>
+          <span>Global Chat</span>
         </div>
         <i
           class="fas fa-times"
           onclick="toggleChat()"
-          style="cursor: pointer; color: #888"
+          style="cursor: pointer"
         ></i>
       </div>
-
       <div class="chat-body" id="chat-messages">
-        <div class="message admin">
-          <span class="username">SYSTEM</span>
-          Selamat datang di komunitas AnimeVerse! Yuk diskusi sehat.
-        </div>
         <div class="message">
-          <span class="username">Goku_07</span>
-          Ada yang tau kapan One Piece libur?
-        </div>
-        <div class="message">
-          <span class="username">Nami_Chan</span>
-          Minggu depan ada filler ya katanya? T.T
+          <span class="username">SYSTEM</span>Selamat datang di komunitas
+          AnimeVerse!
         </div>
       </div>
-
       <div class="chat-footer">
         <input type="text" id="chat-input" placeholder="Ketik pesan..." />
         <button onclick="sendMessage()">
@@ -436,49 +362,139 @@
     </div>
 
     <script>
-      function toggleChat() {
-        const chatWindow = document.getElementById("chat-window");
-        const chatLauncher = document.getElementById("chat-launcher");
+      const API_URL = "https://graphql.anilist.co";
 
-        chatWindow.classList.toggle("hidden");
+      // Fungsi Ambil Data Umum (Home & Populer)
+      async function fetchAnime(sortType, title) {
+        document.getElementById("content-title").innerText = title;
+        const query = `
+          query ($sort: [MediaSort]) {
+            Page(perPage: 12) {
+              media(type: ANIME, sort: $sort) {
+                id
+                title { romaji }
+                coverImage { large }
+                nextAiringEpisode { episode }
+                status
+              }
+            }
+          }`;
 
-        // Efek sembunyikan tombol saat chat terbuka
-        if (!chatWindow.classList.contains("hidden")) {
-          chatLauncher.style.transform = "scale(0) rotate(-90deg)";
-          chatLauncher.style.opacity = "0";
-        } else {
-          chatLauncher.style.transform = "scale(1) rotate(0deg)";
-          chatLauncher.style.opacity = "1";
+        const variables = { sort: [sortType] };
+        await callAniList(query, variables);
+      }
+
+      // Fungsi Search
+      async function handleSearch(e) {
+        if (e.key === "Enter") {
+          const keyword = e.target.value;
+          document.getElementById("content-title").innerText =
+            `Hasil pencarian: ${keyword}`;
+          const query = `
+            query ($search: String) {
+              Page(perPage: 12) {
+                media(type: ANIME, search: $search) {
+                  id
+                  title { romaji }
+                  coverImage { large }
+                  status
+                }
+              }
+            }`;
+          const variables = { search: keyword };
+          await callAniList(query, variables);
         }
+      }
+
+      // Fungsi Jadwal (Airing Today)
+      async function fetchSchedule() {
+        document.getElementById("content-title").innerText =
+          "Jadwal Rilis Hari Ini";
+        const query = `
+          query {
+            Page(perPage: 12) {
+              airingSchedules(airingAt_greater: ${Math.floor(Date.now() / 1000)}, sort: TIME) {
+                media {
+                  title { romaji }
+                  coverImage { large }
+                }
+                episode
+              }
+            }
+          }`;
+
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query }),
+          });
+          const json = await response.json();
+          const list = json.data.Page.airingSchedules.map((item) => ({
+            ...item.media,
+            nextAiringEpisode: { episode: item.episode },
+          }));
+          displayAnime(list);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      // Helper Call API
+      async function callAniList(query, variables) {
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query, variables }),
+          });
+          const json = await response.json();
+          displayAnime(json.data.Page.media);
+        } catch (err) {
+          document.getElementById("anime-list").innerHTML =
+            "<p>Gagal memuat data.</p>";
+        }
+      }
+
+      function displayAnime(animeList) {
+        const container = document.getElementById("anime-list");
+        container.innerHTML = "";
+        animeList.forEach((anime) => {
+          const info = anime.nextAiringEpisode
+            ? `Eps ${anime.nextAiringEpisode.episode}`
+            : anime.status || "";
+          container.innerHTML += `
+            <div class="anime-card">
+              <img src="${anime.coverImage.large}" alt="cover">
+              <div class="card-info">
+                <h3>${anime.title.romaji}</h3>
+                <span>${info}</span>
+              </div>
+            </div>`;
+        });
+      }
+
+      // Chat Functions
+      function toggleChat() {
+        const win = document.getElementById("chat-window");
+        const launch = document.getElementById("chat-launcher");
+        win.classList.toggle("hidden");
+        launch.style.opacity = win.classList.contains("hidden") ? "1" : "0";
       }
 
       function sendMessage() {
         const input = document.getElementById("chat-input");
-        const chatBody = document.getElementById("chat-messages");
-
-        if (input.value.trim() !== "") {
-          const newMsg = document.createElement("div");
-          newMsg.className = "message";
-          newMsg.innerHTML = `
-                    <span class="username">Kamu</span>
-                    ${input.value}
-                `;
-          chatBody.appendChild(newMsg);
+        if (input.value.trim()) {
+          const body = document.getElementById("chat-messages");
+          body.innerHTML += `<div class="message"><span class="username">Kamu</span>${input.value}</div>`;
           input.value = "";
-
-          // Auto scroll ke bawah
-          chatBody.scrollTop = chatBody.scrollHeight;
+          body.scrollTop = body.scrollHeight;
         }
       }
 
-      // Kirim pesan dengan Enter
-      document
-        .getElementById("chat-input")
-        .addEventListener("keypress", function (e) {
-          if (e.key === "Enter") {
-            sendMessage();
-          }
-        });
+      // Load Default
+      window.onload = () =>
+        fetchAnime("TRENDING_DESC", "Sedang Tren di AniList");
     </script>
   </body>
 </html>
