@@ -3,17 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aniger | Premium Streaming</title>
-
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
-      rel="stylesheet"
-    />
+    <title>GeminiAnime - Streaming</title>
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css"
     />
-
     <style>
       :root {
         --primary: #8a2be2;
@@ -28,201 +22,232 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Poppins", sans-serif;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
       body {
         background-color: var(--dark);
         color: var(--text);
         overflow-x: hidden;
-        scroll-behavior: smooth;
       }
 
       /* Navbar */
-      .navbar {
+      nav {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 15px 8%;
+        padding: 15px 5%;
         background: rgba(10, 10, 18, 0.95);
-        backdrop-filter: blur(10px);
-        position: sticky;
+        position: fixed;
+        width: 100%;
         top: 0;
         z-index: 1000;
         border-bottom: 1px solid var(--glass);
       }
       .logo {
         font-size: 24px;
-        font-weight: 600;
-        cursor: pointer;
-        color: white;
-        text-decoration: none;
-      }
-      .logo span {
+        font-weight: bold;
         color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 2px;
       }
       .nav-links {
         display: flex;
-        gap: 25px;
         list-style: none;
+        gap: 25px;
       }
-      .nav-links li {
+      .nav-item {
         cursor: pointer;
-        font-size: 14px;
+        font-weight: 500;
         transition: 0.3s;
         color: #ccc;
       }
-      .nav-links li:hover,
-      .nav-links li.active {
+      .nav-item:hover,
+      .nav-item.active {
         color: var(--primary);
       }
-
-      /* Search Bar Modern */
       .search-box {
-        position: relative;
+        background: var(--glass);
+        border: 1px solid #333;
+        padding: 8px 15px;
+        border-radius: 20px;
         display: flex;
         align-items: center;
-        background: #1f1f3d;
-        border-radius: 25px;
-        padding: 5px 15px;
-        border: 1px solid var(--glass);
-        transition: 0.3s;
-      }
-      .search-box:focus-within {
-        border-color: var(--primary);
-        box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
       }
       .search-box input {
-        background: transparent;
+        background: none;
         border: none;
         color: white;
-        padding: 8px 10px;
         outline: none;
+        margin-left: 10px;
         width: 150px;
-        transition: 0.3s;
-      }
-      .search-box input:focus {
-        width: 220px;
-      }
-      .search-box i {
-        color: var(--primary);
-        font-size: 14px;
       }
 
-      /* Wrapper Page */
+      /* Container */
+      .container {
+        padding: 100px 5% 50px;
+      }
       .page {
         display: none;
-        animation: fadeIn 0.5s ease;
       }
       .page.active {
         display: block;
       }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
 
       /* Hero Slider */
-      .hero-slider {
-        position: relative;
-        height: 480px;
-        width: 100%;
+      #hero-slider {
+        height: 450px;
+        border-radius: 20px;
         overflow: hidden;
-        background: #000;
+        position: relative;
+        margin-bottom: 40px;
       }
       .slide {
         position: absolute;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        transition: 0.8s;
+        inset: 0;
         background-size: cover;
         background-position: center;
-        display: flex;
+        display: none;
         align-items: center;
         padding: 0 8%;
       }
       .slide.active {
-        opacity: 1;
+        display: flex;
+        animation: fadeIn 0.8s ease;
       }
       .slide::before {
         content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(to right, #0a0a12 25%, transparent 100%);
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.9), transparent);
       }
       .hero-content {
         position: relative;
-        z-index: 2;
         max-width: 600px;
+        z-index: 2;
       }
       .btn-play {
         background: var(--primary);
         color: white;
-        padding: 12px 30px;
         border: none;
+        padding: 12px 30px;
         border-radius: 30px;
         cursor: pointer;
-        font-weight: 600;
-        transition: 0.3s;
-      }
-      .btn-play:hover {
-        transform: scale(1.05);
-        background: var(--secondary);
+        font-weight: bold;
+        margin-top: 20px;
       }
 
-      /* Grid */
-      .container {
-        padding: 40px 8%;
-      }
-      .section-title {
-        margin-bottom: 25px;
-        border-left: 4px solid var(--primary);
-        padding-left: 15px;
-        font-size: 22px;
-      }
+      /* Anime Card Style - PERSIS GAMBAR */
       .anime-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 20px;
+        gap: 25px;
       }
       .anime-card {
-        background: var(--card-bg);
-        border-radius: 12px;
-        overflow: hidden;
-        transition: 0.3s;
         cursor: pointer;
-        border: 1px solid var(--glass);
+        transition: 0.4s ease;
+        position: relative;
       }
       .anime-card:hover {
-        transform: translateY(-8px);
-        border-color: var(--primary);
+        transform: translateY(-10px);
       }
-      .anime-card img {
+
+      .card-image-wrapper {
+        position: relative;
         width: 100%;
-        height: 260px;
+        aspect-ratio: 2/3;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+      }
+      .card-image-wrapper img {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
       }
-      .card-info {
-        padding: 12px;
-        font-size: 13px;
+
+      /* Badges */
+      .badge-hot {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #ff3e3e;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 5px;
+        font-size: 10px;
+        font-weight: bold;
+      }
+      .badge-ongoing {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #2b6eff;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 5px;
+        font-size: 10px;
+        font-weight: bold;
+      }
+      .badge-rating {
+        position: absolute;
+        top: 40px;
+        left: 10px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(5px);
+        color: #ffc107;
+        padding: 2px 8px;
+        border-radius: 5px;
+        font-size: 11px;
+      }
+
+      /* Overlay Episode */
+      .ep-overlay {
+        position: absolute;
+        bottom: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(26, 26, 46, 0.85);
+        backdrop-filter: blur(8px);
+        color: white;
+        padding: 8px 0;
+        border-radius: 10px;
+        width: 85%;
         text-align: center;
+        font-weight: 600;
+        font-size: 13px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .card-info {
+        padding: 12px 5px;
+      }
+      .card-info h3 {
+        font-size: 14px;
+        text-transform: uppercase;
+        color: white;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .card-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 8px;
+        font-size: 12px;
+        color: #888;
       }
 
       /* Detail Page */
       .player-grid {
         display: grid;
-        grid-template-columns: 2.5fr 1fr;
-        gap: 25px;
-        padding: 30px 8%;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
       }
       .video-wrapper {
         width: 100%;
         aspect-ratio: 16/9;
-        background: #000;
+        background: black;
         border-radius: 15px;
         overflow: hidden;
       }
@@ -231,143 +256,62 @@
         height: 100%;
         border: none;
       }
-      .episodes-box {
-        background: var(--card-bg);
-        border-radius: 15px;
-        padding: 20px;
-        max-height: 500px;
-        display: flex;
-        flex-direction: column;
-      }
       .ep-list {
-        flex: 1;
-        overflow-y: auto;
+        display: grid;
+        gap: 10px;
         margin-top: 15px;
+        max-height: 400px;
+        overflow-y: auto;
       }
       .ep-item {
+        background: var(--glass);
         padding: 12px;
-        border-bottom: 1px solid var(--glass);
-        cursor: pointer;
         border-radius: 8px;
-        margin-bottom: 5px;
-        font-size: 14px;
+        cursor: pointer;
+        transition: 0.3s;
+        border: 1px solid transparent;
       }
       .ep-item:hover {
         background: var(--primary);
+        border-color: white;
       }
 
-      /* Global Chat Modern */
-      .chat-launcher {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 55px;
-        height: 55px;
-        background: var(--primary);
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        cursor: pointer;
-        z-index: 1001;
-        box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
-      }
-      .chat-window {
-        position: fixed;
-        bottom: 100px;
-        right: 30px;
-        width: 320px;
-        height: 450px;
-        background: #16162a;
-        border-radius: 15px;
-        border: 1px solid var(--glass);
-        display: none;
-        flex-direction: column;
-        z-index: 1000;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      }
-      .chat-header {
-        padding: 15px;
-        background: #1f1f3d;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .chat-body {
-        flex: 1;
-        padding: 15px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        font-size: 13px;
-      }
-      .msg {
-        background: var(--glass);
-        padding: 8px 12px;
-        border-radius: 10px;
-        align-self: flex-start;
-        max-width: 80%;
-      }
-      .msg.me {
-        background: var(--primary);
-        align-self: flex-end;
-      }
-      .chat-footer {
-        padding: 12px;
-        display: flex;
-        gap: 8px;
-        background: #1f1f3d;
-      }
-      .chat-footer input {
-        flex: 1;
-        background: #252545;
-        border: none;
-        padding: 10px;
-        color: white;
-        border-radius: 8px;
-        outline: none;
-      }
-
+      /* Loader */
       #loader {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 3px;
-        background: var(--primary);
-        z-index: 2000;
-        display: none;
+        inset: 0;
+        background: var(--dark);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
       }
 
-      @media (max-width: 900px) {
-        .player-grid {
-          grid-template-columns: 1fr;
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
         }
-        .search-box input {
-          width: 100px;
+        to {
+          opacity: 1;
         }
       }
     </style>
   </head>
   <body>
-    <div id="loader"></div>
+    <div id="loader">MEMUAT DATA...</div>
 
-    <nav class="navbar">
-      <div class="logo" onclick="showPage('home-page')">
-        Ani<span>ger</span>
-      </div>
+    <nav>
+      <div class="logo">Ani<span>ger</span></div>
       <ul class="nav-links">
-        <li onclick="showPage('home-page')" class="nav-item active">Home</li>
+        <li class="nav-item active" onclick="initHome()">Home</li>
         <li
-          onclick="loadCategory('POPULARITY_DESC', 'Paling Populer')"
           class="nav-item"
+          onclick="loadCategory('POPULARITY_DESC', 'Paling Populer')"
         >
           Populer
         </li>
-        <li onclick="loadSchedule()" class="nav-item">Jadwal</li>
+        <li class="nav-item" onclick="loadSchedule()">Jadwal</li>
       </ul>
       <div class="search-box">
         <i class="fas fa-search"></i>
@@ -375,75 +319,60 @@
           type="text"
           placeholder="Cari anime..."
           onkeypress="handleSearch(event)"
-          id="main-search"
         />
       </div>
     </nav>
 
-    <section id="home-page" class="page active">
-      <header class="hero-slider" id="hero-slider"></header>
-      <div class="container">
-        <h2 class="section-title">Lagi Trending</h2>
-        <div class="anime-grid" id="trending-list"></div>
-      </div>
-    </section>
-
-    <section id="category-page" class="page">
-      <div class="container">
-        <h2 class="section-title" id="category-title">Explore</h2>
-        <div class="anime-grid" id="category-list"></div>
-      </div>
-    </section>
-
-    <section id="detail-page" class="page">
-      <div id="detail-content"></div>
-    </section>
-
-    <div class="chat-launcher" onclick="toggleChat()">
-      <i class="fas fa-comments"></i>
-    </div>
-    <div id="chat-window" class="chat-window">
-      <div class="chat-header">
-        <span style="font-weight: 600"
-          ><i class="fas fa-circle" style="color: #00ff88; font-size: 8px"></i>
-          Global Chat</span
-        >
-        <i
-          class="fas fa-times"
-          onclick="toggleChat()"
-          style="cursor: pointer"
-        ></i>
-      </div>
-      <div class="chat-body" id="chat-messages">
-        <div class="msg">Halo! Selamat bergabung di komunitas AnimeVerse.</div>
-      </div>
-      <div class="chat-footer">
-        <input
-          type="text"
-          id="chat-input"
-          placeholder="Ketik sesuatu..."
-          onkeypress="if (event.key === 'Enter') sendMessage();"
-        />
-        <button
-          onclick="sendMessage()"
+    <div class="container">
+      <div id="home-page" class="page active">
+        <div id="hero-slider"></div>
+        <h2
           style="
-            background: var(--primary);
-            border: none;
-            color: white;
-            width: 40px;
-            border-radius: 8px;
-            cursor: pointer;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
           "
         >
-          <i class="fas fa-paper-plane"></i>
+          UPDATE EPISODE TERBARU
+        </h2>
+        <div id="trending-list" class="anime-grid"></div>
+      </div>
+
+      <div id="category-page" class="page">
+        <h2
+          id="category-title"
+          style="
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+          "
+        >
+          Kategori
+        </h2>
+        <div id="category-list" class="anime-grid"></div>
+      </div>
+
+      <div id="detail-page" class="page">
+        <button
+          onclick="showPage('home-page')"
+          style="
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-weight: bold;
+          "
+        >
+          <i class="fas fa-arrow-left"></i> Kembali
         </button>
+        <div id="detail-content"></div>
       </div>
     </div>
 
     <script>
       const API_URL = "https://graphql.anilist.co";
 
-      // Navigation & Loader
       function showPage(pageId) {
         document
           .querySelectorAll(".page")
@@ -451,20 +380,19 @@
         document.getElementById(pageId).classList.add("active");
         window.scrollTo(0, 0);
 
-        // Update status menu aktif
-        document.querySelectorAll(".nav-item").forEach((item) => {
-          item.classList.remove("active");
-          if (item.getAttribute("onclick")?.includes(pageId))
-            item.classList.add("active");
+        document.querySelectorAll(".nav-item").forEach((nav) => {
+          nav.classList.remove("active");
+          if (pageId === "home-page" && nav.innerText === "Home")
+            nav.classList.add("active");
         });
       }
 
       function toggleLoader(show) {
-        const loader = document.getElementById("loader");
-        if (loader) loader.style.display = show ? "block" : "none";
+        document.getElementById("loader").style.display = show
+          ? "flex"
+          : "none";
       }
 
-      // Fungsi Translate
       async function translateText(text) {
         if (!text) return "Sinopsis tidak tersedia.";
         const cleanText = text.replace(/<\/?[^>]+(>|$)/g, "");
@@ -479,13 +407,14 @@
         }
       }
 
-      // 1. Load Home (Episode Terbaru)
+      // INIT HOME
       async function initHome() {
         toggleLoader(true);
+        showPage("home-page");
         const query = `query { 
-      slider: Page(perPage: 5) { media(type: ANIME, sort: TRENDING_DESC) { id title { romaji } description bannerImage coverImage { extraLarge } } }
-      recent: Page(perPage: 12) { airingSchedules(airingAt_lesser: ${Math.floor(Date.now() / 1000)}, sort: TIME_DESC) { episode media { id title { romaji } coverImage { large } } } }
-    }`;
+                slider: Page(perPage: 5) { media(type: ANIME, sort: TRENDING_DESC) { id title { romaji } description bannerImage coverImage { extraLarge } } }
+                recent: Page(perPage: 12) { airingSchedules(airingAt_lesser: ${Math.floor(Date.now() / 1000)}, sort: TIME_DESC) { episode media { id title { romaji } averageScore coverImage { large } } } }
+            }`;
 
         try {
           const res = await fetch(API_URL, {
@@ -500,29 +429,39 @@
           document.getElementById("hero-slider").innerHTML = data.slider.media
             .map(
               (a, i) => `
-            <div class="slide ${i === 0 ? "active" : ""}" style="background-image: url('${a.bannerImage || a.coverImage.extraLarge}')">
-                <div class="hero-content">
-                    <h1>${a.title.romaji}</h1>
-                    <p style="margin: 15px 0; color: #ccc;">${a.description ? a.description.substring(0, 120).replace(/<\/?[^>]+(>|$)/g, "") : "Tonton sekarang!"}...</p>
-                    <button class="btn-play" onclick="loadDetail(${a.id})"><i class="fas fa-play"></i> Tonton</button>
-                </div>
-            </div>
-        `,
+                    <div class="slide ${i === 0 ? "active" : ""}" style="background-image: url('${a.bannerImage || a.coverImage.extraLarge}')">
+                        <div class="hero-content">
+                            <h1>${a.title.romaji}</h1>
+                            <p style="margin: 15px 0; color: #ccc;">${a.description ? a.description.substring(0, 120).replace(/<\/?[^>]+(>|$)/g, "") : "Tonton Sekarang"}...</p>
+                            <button class="btn-play" onclick="loadDetail(${a.id})"><i class="fas fa-play"></i> Tonton Sekarang</button>
+                        </div>
+                    </div>
+                `,
             )
             .join("");
 
-          // Render List - Format: JUDUL EPISODE X
+          // Render List - PREMIUM CARD STYLE
           document.getElementById("trending-list").innerHTML =
             data.recent.airingSchedules
               .map(
                 (item) => `
-            <div class="anime-card" onclick="loadDetail(${item.media.id})">
-                <img src="${item.media.coverImage.large}">
-                <div class="card-info">
-                    <h3 style="font-size: 13px; line-height: 1.4;">${item.media.title.romaji} <span style="color: var(--primary)">Episode ${item.episode}</span></h3>
-                </div>
-            </div>
-        `,
+                    <div class="anime-card" onclick="loadDetail(${item.media.id})">
+                        <div class="card-image-wrapper">
+                            <img src="${item.media.coverImage.large}">
+                            <div class="badge-hot">HOT</div>
+                            <div class="badge-ongoing">ONGOING</div>
+                            <div class="badge-rating"><i class="fas fa-star"></i> ${item.media.averageScore ? (item.media.averageScore / 10).toFixed(1) : "7.5"}</div>
+                            <div class="ep-overlay">Eps. ${item.episode}</div>
+                        </div>
+                        <div class="card-info">
+                            <h3>${item.media.title.romaji}</h3>
+                            <div class="card-meta">
+                                <span><i class="far fa-clock"></i> 1 jam lalu</span>
+                                <span style="color: #2b6eff"><i class="fas fa-circle" style="font-size: 8px"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                `,
               )
               .join("");
 
@@ -534,10 +473,10 @@
         }
       }
 
-      // 2. Load Populer
+      // LOAD POPULER
       async function loadCategory(sort, title) {
         toggleLoader(true);
-        const query = `query($s:[MediaSort]){ Page(perPage:18){ media(type:ANIME, sort:$s){ id title{romaji} coverImage{large} } } }`;
+        const query = `query($s:[MediaSort]){ Page(perPage:18){ media(type:ANIME, sort:$s){ id title{romaji} averageScore coverImage{large} } } }`;
         try {
           const res = await fetch(API_URL, {
             method: "POST",
@@ -551,10 +490,10 @@
         }
       }
 
-      // 3. Load Jadwal (Hari Ini)
+      // LOAD JADWAL
       async function loadSchedule() {
         toggleLoader(true);
-        const query = `query{ Page(perPage:18){ airingSchedules(airingAt_greater:${Math.floor(Date.now() / 1000)}, sort:TIME){ media{ id title{romaji} coverImage{large} } episode } } }`;
+        const query = `query{ Page(perPage:18){ airingSchedules(airingAt_greater:${Math.floor(Date.now() / 1000)}, sort:TIME){ media{ id title{romaji} averageScore coverImage{large} } episode } } }`;
         try {
           const res = await fetch(API_URL, {
             method: "POST",
@@ -577,23 +516,25 @@
         document.getElementById("category-list").innerHTML = data
           .map(
             (a) => `
-        <div class="anime-card" onclick="loadDetail(${a.id})">
-            <img src="${a.coverImage.large}">
-            <div class="card-info">
-                <h3>${a.title.romaji} ${a.episode ? `<span style="color:var(--primary)">Ep ${a.episode}</span>` : ""}</h3>
-            </div>
-        </div>
-    `,
+                <div class="anime-card" onclick="loadDetail(${a.id})">
+                    <div class="card-image-wrapper">
+                        <img src="${a.coverImage.large}">
+                        <div class="badge-rating"><i class="fas fa-star"></i> ${(a.averageScore / 10).toFixed(1)}</div>
+                        ${a.episode ? `<div class="ep-overlay">Eps. ${a.episode}</div>` : ""}
+                    </div>
+                    <div class="card-info"><h3>${a.title.romaji}</h3></div>
+                </div>
+            `,
           )
           .join("");
         showPage("category-page");
         toggleLoader(false);
       }
 
-      // 4. Load Detail + Translate
+      // DETAIL PAGE
       async function loadDetail(id) {
         toggleLoader(true);
-        const query = `query($id:Int){ Media(id:$id){ title{romaji} description genres episodes recommendations(perPage:6){ nodes{ mediaRecommendation{ id title{romaji} coverImage{large} } } } } }`;
+        const query = `query($id:Int){ Media(id:$id){ title{romaji} description genres episodes averageScore recommendations(perPage:6){ nodes{ mediaRecommendation{ id title{romaji} coverImage{large} } } } } }`;
         try {
           const res = await fetch(API_URL, {
             method: "POST",
@@ -605,21 +546,28 @@
           const sinopsisIndo = await translateText(a.description);
 
           document.getElementById("detail-content").innerHTML = `
-            <div class="player-grid">
-                <div>
-                    <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe></div>
-                    <div style="margin-top:20px">
-                        <h2>${a.title.romaji}</h2>
-                        <div style="margin:10px 0">${a.genres.map((g) => `<span style="background:var(--primary); font-size:11px; padding:3px 10px; border-radius:20px; margin-right:5px">${g}</span>`).join("")}</div>
-                        <p style="color:#aaa; font-size:14px; line-height:1.6">${sinopsisIndo}</p>
+                    <div class="player-grid">
+                        <div>
+                            <div class="video-wrapper">
+                                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                            </div>
+                            <div style="margin-top:25px">
+                                <h1 style="font-size:28px">${a.title.romaji}</h1>
+                                <div style="margin:15px 0">
+                                    <span style="color:#ffc107; margin-right:15px"><i class="fas fa-star"></i> ${(a.averageScore / 10).toFixed(1)} Rating</span>
+                                    ${a.genres.map((g) => `<span style="background:var(--primary); font-size:11px; padding:4px 12px; border-radius:20px; margin-right:8px">${g}</span>`).join("")}
+                                </div>
+                                <p style="color:#bbb; line-height:1.8; background:var(--glass); padding:20px; border-radius:12px;">${sinopsisIndo}</p>
+                            </div>
+                        </div>
+                        <div class="episodes-box">
+                            <h3 style="border-bottom: 2px solid var(--primary); padding-bottom:10px">Daftar Episode</h3>
+                            <div class="ep-list">
+                                ${Array.from({ length: a.episodes || 12 }, (_, i) => `<div class="ep-item">Episode ${i + 1} <i class="fas fa-play-circle" style="float:right"></i></div>`).join("")}
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="episodes-box">
-                    <h3>Daftar Episode</h3>
-                    <div class="ep-list">${Array.from({ length: a.episodes || 12 }, (_, i) => `<div class="ep-item">Episode ${i + 1}</div>`).join("")}</div>
-                </div>
-            </div>
-        `;
+                `;
           showPage("detail-page");
         } catch (e) {
           console.error(e);
@@ -628,23 +576,23 @@
         }
       }
 
-      // Search
+      // SEARCH
       async function handleSearch(e) {
         if (e.key === "Enter") {
           toggleLoader(true);
           const s = e.target.value;
-          const query = `query($s:String){ Page(perPage:18){ media(search:$s, type:ANIME){ id title{romaji} coverImage{large} } } }`;
+          const query = `query($s:String){ Page(perPage:18){ media(search:$s, type:ANIME){ id title{romaji} averageScore coverImage{large} } } }`;
           const res = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ query, variables: { s } }),
           });
           const json = await res.json();
-          renderCategory(`Hasil: ${s}`, json.data.Page.media);
+          renderCategory(`Hasil Cari: ${s}`, json.data.Page.media);
         }
       }
 
-      // Slider & Chat Logic
+      // AUTO SLIDE
       let slideIdx = 0;
       function startAutoSlide() {
         setInterval(() => {
@@ -653,12 +601,7 @@
           slides[slideIdx].classList.remove("active");
           slideIdx = (slideIdx + 1) % slides.length;
           slides[slideIdx].classList.add("active");
-        }, 5000);
-      }
-
-      function toggleChat() {
-        const win = document.getElementById("chat-window");
-        win.style.display = win.style.display === "flex" ? "none" : "flex";
+        }, 6000);
       }
 
       window.onload = initHome;
