@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnimeVerse | Streaming & Community</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <style>
+      /* --- CSS STYLING --- */
+      :root {
+        --primary: #8a2be2;
+        --secondary: #4b0082;
+        --dark: #0f0f1a;
+        --card-bg: #1a1a2e;
+        --text: #ffffff;
+        --glass: rgba(255, 255, 255, 0.05);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background-color: var(--dark);
+        color: var(--text);
+        overflow-x: hidden;
+      }
+
+      /* Navbar */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 8%;
+        background: rgba(15, 15, 26, 0.95);
+        backdrop-filter: blur(10px);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 1px solid var(--glass);
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .logo span {
+        color: var(--primary);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 25px;
+        list-style: none;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: #ccc;
+        transition: 0.3s;
+        font-size: 14px;
+      }
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+
+      .search-bar input {
+        padding: 8px 18px;
+        border-radius: 20px;
+        border: 1px solid var(--glass);
+        background: #252545;
+        color: white;
+        outline: none;
+      }
+
+      /* Hero Section */
+      .hero {
+        height: 500px;
+        background:
+          linear-gradient(to right, rgba(15, 15, 26, 1), rgba(15, 15, 26, 0.2)),
+          url("https://images.alphacoders.com/131/1310162.jpeg");
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        padding: 0 8%;
+      }
+
+      .hero-content h1 {
+        font-size: 50px;
+        line-height: 1.2;
+        margin-bottom: 15px;
+      }
+      .hero-content p {
+        color: #ccc;
+        max-width: 500px;
+        margin-bottom: 25px;
+      }
+
+      .btn-watch {
+        padding: 12px 35px;
+        background: var(--primary);
+        border: none;
+        color: white;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
+        box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+      }
+      .btn-watch:hover {
+        background: var(--secondary);
+        transform: translateY(-3px);
+      }
+
+      /* Anime Grid */
+      .container {
+        padding: 50px 8%;
+      }
+      .section-title {
+        margin-bottom: 30px;
+        border-left: 5px solid var(--primary);
+        padding-left: 15px;
+        font-size: 24px;
+      }
+
+      .anime-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 25px;
+      }
+
+      .anime-card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: 0.4s;
+        border: 1px solid var(--glass);
+      }
+
+      .anime-card:hover {
+        transform: scale(1.05);
+        border-color: var(--primary);
+      }
+      .anime-card img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+      }
+
+      .card-info {
+        padding: 15px;
+      }
+      .card-info h3 {
+        font-size: 15px;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .card-info span {
+        font-size: 12px;
+        color: #8a2be2;
+        font-weight: bold;
+      }
+
+      /* --- GLOBAL CHAT SYSTEM --- */
+      .chat-launcher {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 65px;
+        height: 65px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 26px;
+        cursor: pointer;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        z-index: 1001;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .chat-launcher:hover {
+        transform: scale(1.1) rotate(10deg);
+      }
+
+      .chat-window {
+        position: fixed;
+        bottom: 110px;
+        right: 30px;
+        width: 350px;
+        height: 480px;
+        background: #16162a;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        border: 1px solid var(--glass);
+        transition: 0.3s ease;
+        transform-origin: bottom right;
+      }
+
+      .chat-window.hidden {
+        opacity: 0;
+        transform: scale(0.5) translateY(100px);
+        pointer-events: none;
+      }
+
+      .chat-header {
+        padding: 20px;
+        background: #1f1f3d;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 20px 20px 0 0;
+      }
+
+      .online-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        background: #00ff88;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #00ff88;
+      }
+
+      .chat-body {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .message {
+        font-size: 13px;
+        background: var(--glass);
+        padding: 10px;
+        border-radius: 10px;
+        width: fit-content;
+        max-width: 80%;
+      }
+      .message.admin {
+        border-left: 3px solid var(--primary);
+      }
+      .username {
+        display: block;
+        font-weight: bold;
+        color: var(--primary);
+        font-size: 11px;
+        margin-bottom: 2px;
+      }
+
+      .chat-footer {
+        padding: 15px;
+        display: flex;
+        gap: 10px;
+        background: #1f1f3d;
+        border-radius: 0 0 20px 20px;
+      }
+
+      .chat-footer input {
+        flex: 1;
+        background: #252545;
+        border: none;
+        padding: 12px;
+        border-radius: 10px;
+        color: white;
+        outline: none;
+      }
+
+      .chat-footer button {
+        background: var(--primary);
+        border: none;
+        color: white;
+        width: 45px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .chat-footer button:hover {
+        background: var(--secondary);
+      }
+
+      /* Scrollbar Styling */
+      ::-webkit-scrollbar {
+        width: 5px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">Anime<span>Verse</span></div>
+      <ul class="nav-links">
+        <li>
+          <a href="#"><i class="fas fa-home"></i> Home</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-fire"></i> Populer</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-calendar-alt"></i> Jadwal</a>
+        </li>
+      </ul>
+      <div class="search-bar">
+        <input type="text" placeholder="Cari anime favorit..." />
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="hero-content">
+        <h1>Solo Leveling: <br />Ragnarok</h1>
+        <p>
+          Dunia telah berubah, dan level harus terus ditingkatkan. Saksikan
+          kembalinya sang Hunter terkuat di musim terbaru.
+        </p>
+        <button class="btn-watch">
+          <i class="fas fa-play"></i> Mulai Menonton
+        </button>
+      </div>
+    </header>
+
+    <main class="container">
+      <h2 class="section-title">Sedang Tren</h2>
+      <div class="anime-grid">
+        <div class="anime-card">
+          <img
+            src="https://m.media-amazon.com/images/M/MV5BODcwN2EwMzgtMzU0MS00MzAyLWI2Y2EtNjI3MWY0ZWFiMTJlXkEyXkFqcGdeQXVyMTA3MDk2NDg2._V1_.jpg"
+            alt="One Piece"
+          />
+          <div class="card-info">
+            <h3>One Piece</h3>
+            <span>Episode 1115</span>
+          </div>
+        </div>
+        <div class="anime-card">
+          <img
+            src="https://m.media-amazon.com/images/I/81S7H-h+N6L._AC_UF1000,1000_QL80_.jpg"
+            alt="Jujutsu Kaisen"
+          />
+          <div class="card-info">
+            <h3>Jujutsu Kaisen</h3>
+            <span>S2 Finished</span>
+          </div>
+        </div>
+        <div class="anime-card">
+          <img
+            src="https://static.tvtropes.org/pmwiki/pub/images/frieren_beyond_journeys_end_anime_visual.jpg"
+            alt="Frieren"
+          />
+          <div class="card-info">
+            <h3>Frieren: Beyond Journey's End</h3>
+            <span>Episode 28</span>
+          </div>
+        </div>
+        <div class="anime-card">
+          <img
+            src="https://m.media-amazon.com/images/M/MV5BMGIzZjdjZGYtN2I3Yy00MGQ0LWFjY2ItYWRkYjc1N2ZkZDAyXkEyXkFqcGdeQXVyMTA3MDk2NDg2._V1_.jpg"
+            alt="Kaiju No 8"
+          />
+          <div class="card-info">
+            <h3>Kaiju No. 8</h3>
+            <span>Episode 08</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="chat-launcher" class="chat-launcher" onclick="toggleChat()">
+      <i class="fas fa-comment-dots"></i>
+    </div>
+
+    <div id="chat-window" class="chat-window hidden">
+      <div class="chat-header">
+        <div class="online-status">
+          <div class="dot"></div>
+          <span>Global Chat (2,481)</span>
+        </div>
+        <i
+          class="fas fa-times"
+          onclick="toggleChat()"
+          style="cursor: pointer; color: #888"
+        ></i>
+      </div>
+
+      <div class="chat-body" id="chat-messages">
+        <div class="message admin">
+          <span class="username">SYSTEM</span>
+          Selamat datang di komunitas AnimeVerse! Yuk diskusi sehat.
+        </div>
+        <div class="message">
+          <span class="username">Goku_07</span>
+          Ada yang tau kapan One Piece libur?
+        </div>
+        <div class="message">
+          <span class="username">Nami_Chan</span>
+          Minggu depan ada filler ya katanya? T.T
+        </div>
+      </div>
+
+      <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Ketik pesan..." />
+        <button onclick="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      function toggleChat() {
+        const chatWindow = document.getElementById("chat-window");
+        const chatLauncher = document.getElementById("chat-launcher");
+
+        chatWindow.classList.toggle("hidden");
+
+        // Efek sembunyikan tombol saat chat terbuka
+        if (!chatWindow.classList.contains("hidden")) {
+          chatLauncher.style.transform = "scale(0) rotate(-90deg)";
+          chatLauncher.style.opacity = "0";
+        } else {
+          chatLauncher.style.transform = "scale(1) rotate(0deg)";
+          chatLauncher.style.opacity = "1";
+        }
+      }
+
+      function sendMessage() {
+        const input = document.getElementById("chat-input");
+        const chatBody = document.getElementById("chat-messages");
+
+        if (input.value.trim() !== "") {
+          const newMsg = document.createElement("div");
+          newMsg.className = "message";
+          newMsg.innerHTML = `
+                    <span class="username">Kamu</span>
+                    ${input.value}
+                `;
+          chatBody.appendChild(newMsg);
+          input.value = "";
+
+          // Auto scroll ke bawah
+          chatBody.scrollTop = chatBody.scrollHeight;
+        }
+      }
+
+      // Kirim pesan dengan Enter
+      document
+        .getElementById("chat-input")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+    </script>
+  </body>
+</html>
