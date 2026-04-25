@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aniger - Streaming Anime</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="loader"><div class="spinner"></div></div>
+
+    <nav>
+      <div class="logo" onclick="initHome()">Ani<span>ger</span></div>
+      <ul class="nav-links">
+        <li id="m-home" class="nav-item active" onclick="initHome()">Home</li>
+        <li
+          id="m-pop"
+          class="nav-item"
+          onclick="loadCategory('POPULARITY_DESC', 'Populer')"
+        >
+          Populer
+        </li>
+        <li id="m-jad" class="nav-item" onclick="loadSchedule()">Jadwal</li>
+      </ul>
+      <div class="search-box">
+        <i class="fas fa-search" style="color: #666"></i>
+        <input
+          type="text"
+          placeholder="Cari anime..."
+          onkeypress="handleSearch(event)"
+        />
+      </div>
+    </nav>
+
+    <div class="container">
+      <div id="home-page" class="page active">
+        <div id="hero-slider"></div>
+        <h2 class="sec-title"><span></span>UPDATE EPISODE</h2>
+        <div id="trending-list" class="anime-grid"></div>
+      </div>
+
+      <div id="category-page" class="page">
+        <h2 id="category-title" class="sec-title"><span></span>Kategori</h2>
+        <div id="category-list" class="anime-grid"></div>
+      </div>
+
+      <div id="detail-page" class="page">
+        <button onclick="showPage('home-page')" class="btn-back">
+          <i class="fas fa-arrow-left"></i> Kembali
+        </button>
+        <div id="detail-content"></div>
+        <h2 class="sec-title"><span></span>ANIME SERUPA</h2>
+        <div id="recommendation-list" class="anime-grid"></div>
+      </div>
+    </div>
+
+    <div id="chat-container">
+      <div
+        class="chat-toggle"
+        onclick="
+          document.getElementById('chat-container').classList.toggle('open')
+        "
+      >
+        <i class="fas fa-comments"></i>
+      </div>
+      <div class="chat-header">CHAT GLOBAL</div>
+      <div id="chat-messages">
+        <div class="msg"><b>Sistem</b>Selamat datang di Aniger!</div>
+      </div>
+      <div class="chat-input">
+        <input
+          type="text"
+          id="msgInput"
+          placeholder="Ketik pesan..."
+          onkeypress="if (event.key == 'Enter') sendChat();"
+        />
+        <button onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
