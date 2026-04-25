@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AnimeVerse | Premium Streaming</title>
+    <title>Aniger | Premium Streaming</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
@@ -357,7 +357,7 @@
 
     <nav class="navbar">
       <div class="logo" onclick="showPage('home-page')">
-        Anime<span>Verse</span>
+        Ani<span>ger</span>
       </div>
       <ul class="nav-links">
         <li onclick="showPage('home-page')" class="nav-item active">Home</li>
@@ -451,123 +451,184 @@
         document.getElementById(pageId).classList.add("active");
         window.scrollTo(0, 0);
 
+        // Update status menu aktif
         document.querySelectorAll(".nav-item").forEach((item) => {
           item.classList.remove("active");
-          if (item.innerText.toLowerCase() === pageId.split("-")[0])
+          if (item.getAttribute("onclick")?.includes(pageId))
             item.classList.add("active");
         });
       }
 
       function toggleLoader(show) {
-        document.getElementById("loader").style.display = show
-          ? "block"
-          : "none";
+        const loader = document.getElementById("loader");
+        if (loader) loader.style.display = show ? "block" : "none";
       }
 
-      // 1. Load Home
+      // Fungsi Translate
+      async function translateText(text) {
+        if (!text) return "Sinopsis tidak tersedia.";
+        const cleanText = text.replace(/<\/?[^>]+(>|$)/g, "");
+        try {
+          const res = await fetch(
+            `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=id&dt=t&q=${encodeURI(cleanText)}`,
+          );
+          const json = await res.json();
+          return json[0].map((item) => item[0]).join("");
+        } catch (e) {
+          return cleanText;
+        }
+      }
+
+      // 1. Load Home (Episode Terbaru)
       async function initHome() {
         toggleLoader(true);
         const query = `query { 
-          slider: Page(perPage: 5) { media(type: ANIME, sort: TRENDING_DESC) { id title { romaji } description bannerImage coverImage { extraLarge } } }
-          trending: Page(perPage: 12) { media(type: ANIME, sort: TRENDING_DESC) { id title { romaji } coverImage { large } } }
-        }`;
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query }),
-        });
-        const json = await res.json();
+      slider: Page(perPage: 5) { media(type: ANIME, sort: TRENDING_DESC) { id title { romaji } description bannerImage coverImage { extraLarge } } }
+      recent: Page(perPage: 12) { airingSchedules(airingAt_lesser: ${Math.floor(Date.now() / 1000)}, sort: TIME_DESC) { episode media { id title { romaji } coverImage { large } } } }
+    }`;
 
-        // Render Slider
-        const slider = document.getElementById("hero-slider");
-        slider.innerHTML = json.data.slider.media
-          .map(
-            (a, i) => `
-          <div class="slide ${i === 0 ? "active" : ""}" style="background-image: url('${a.bannerImage || a.coverImage.extraLarge}')">
-            <div class="hero-content">
-              <h1>${a.title.romaji}</h1>
-              <p style="margin: 15px 0; color: #ccc;">${a.description?.substring(0, 160)}...</p>
-              <button class="btn-play" onclick="loadDetail(${a.id})"><i class="fas fa-play"></i> Tonton</button>
-            </div>
-          </div>
-        `,
-          )
-          .join("");
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query }),
+          });
+          const json = await res.json();
+          const data = json.data;
 
-        // Render Trending
-        document.getElementById("trending-list").innerHTML =
-          json.data.trending.media
+          // Render Slider
+          document.getElementById("hero-slider").innerHTML = data.slider.media
             .map(
-              (a) => `
-          <div class="anime-card" onclick="loadDetail(${a.id})">
-            <img src="${a.coverImage.large}">
-            <div class="card-info"><h3>${a.title.romaji}</h3></div>
-          </div>
+              (a, i) => `
+            <div class="slide ${i === 0 ? "active" : ""}" style="background-image: url('${a.bannerImage || a.coverImage.extraLarge}')">
+                <div class="hero-content">
+                    <h1>${a.title.romaji}</h1>
+                    <p style="margin: 15px 0; color: #ccc;">${a.description ? a.description.substring(0, 120).replace(/<\/?[^>]+(>|$)/g, "") : "Tonton sekarang!"}...</p>
+                    <button class="btn-play" onclick="loadDetail(${a.id})"><i class="fas fa-play"></i> Tonton</button>
+                </div>
+            </div>
         `,
             )
             .join("");
 
-        startAutoSlide();
-        toggleLoader(false);
-      }
-
-      // 2. Load Detail
-      async function loadDetail(id) {
-        toggleLoader(true);
-        const query = `query($id:Int){ Media(id:$id){ title{romaji} description genres episodes recommendations(perPage:6){ nodes{ mediaRecommendation{ id title{romaji} coverImage{large} } } } } }`;
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query, variables: { id } }),
-        });
-        const json = await res.json();
-        const a = json.data.Media;
-
-        document.getElementById("detail-content").innerHTML = `
-          <div class="player-grid">
-            <div>
-              <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe></div>
-              <div style="margin-top:20px">
-                <h2>${a.title.romaji}</h2>
-                <div style="margin:10px 0">${a.genres.map((g) => `<span style="background:var(--primary); font-size:11px; padding:3px 10px; border-radius:20px; margin-right:5px">${g}</span>`).join("")}</div>
-                <p style="color:#aaa; font-size:14px; line-height:1.6">${a.description}</p>
-              </div>
-            </div>
-            <div class="episodes-box">
-              <h3>Episode List</h3>
-              <div class="ep-list">${Array.from({ length: a.episodes || 12 }, (_, i) => `<div class="ep-item">Episode ${i + 1}</div>`).join("")}</div>
-            </div>
-          </div>
-          <div class="container">
-            <h2 class="section-title">Rekomendasi</h2>
-            <div class="anime-grid">${a.recommendations.nodes
+          // Render List - Format: JUDUL EPISODE X
+          document.getElementById("trending-list").innerHTML =
+            data.recent.airingSchedules
               .map(
-                (r) => `
-              <div class="anime-card" onclick="loadDetail(${r.mediaRecommendation.id})">
-                <img src="${r.mediaRecommendation.coverImage.large}">
-                <div class="card-info"><h3>${r.mediaRecommendation.title.romaji}</h3></div>
-              </div>`,
+                (item) => `
+            <div class="anime-card" onclick="loadDetail(${item.media.id})">
+                <img src="${item.media.coverImage.large}">
+                <div class="card-info">
+                    <h3 style="font-size: 13px; line-height: 1.4;">${item.media.title.romaji} <span style="color: var(--primary)">Episode ${item.episode}</span></h3>
+                </div>
+            </div>
+        `,
               )
-              .join("")}</div>
-          </div>
-        `;
-        showPage("detail-page");
-        toggleLoader(false);
+              .join("");
+
+          startAutoSlide();
+        } catch (e) {
+          console.error(e);
+        } finally {
+          toggleLoader(false);
+        }
       }
 
-      // 3. Category & Search
+      // 2. Load Populer
       async function loadCategory(sort, title) {
         toggleLoader(true);
         const query = `query($s:[MediaSort]){ Page(perPage:18){ media(type:ANIME, sort:$s){ id title{romaji} coverImage{large} } } }`;
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query, variables: { s: [sort] } }),
-        });
-        const json = await res.json();
-        renderCategory(title, json.data.Page.media);
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query, variables: { s: [sort] } }),
+          });
+          const json = await res.json();
+          renderCategory(title, json.data.Page.media);
+        } catch (e) {
+          console.error(e);
+        }
       }
 
+      // 3. Load Jadwal (Hari Ini)
+      async function loadSchedule() {
+        toggleLoader(true);
+        const query = `query{ Page(perPage:18){ airingSchedules(airingAt_greater:${Math.floor(Date.now() / 1000)}, sort:TIME){ media{ id title{romaji} coverImage{large} } episode } } }`;
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query }),
+          });
+          const json = await res.json();
+          const list = json.data.Page.airingSchedules.map((i) => ({
+            ...i.media,
+            episode: i.episode,
+          }));
+          renderCategory("Jadwal Rilis", list);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      function renderCategory(title, data) {
+        document.getElementById("category-title").innerText = title;
+        document.getElementById("category-list").innerHTML = data
+          .map(
+            (a) => `
+        <div class="anime-card" onclick="loadDetail(${a.id})">
+            <img src="${a.coverImage.large}">
+            <div class="card-info">
+                <h3>${a.title.romaji} ${a.episode ? `<span style="color:var(--primary)">Ep ${a.episode}</span>` : ""}</h3>
+            </div>
+        </div>
+    `,
+          )
+          .join("");
+        showPage("category-page");
+        toggleLoader(false);
+      }
+
+      // 4. Load Detail + Translate
+      async function loadDetail(id) {
+        toggleLoader(true);
+        const query = `query($id:Int){ Media(id:$id){ title{romaji} description genres episodes recommendations(perPage:6){ nodes{ mediaRecommendation{ id title{romaji} coverImage{large} } } } } }`;
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query, variables: { id } }),
+          });
+          const json = await res.json();
+          const a = json.data.Media;
+          const sinopsisIndo = await translateText(a.description);
+
+          document.getElementById("detail-content").innerHTML = `
+            <div class="player-grid">
+                <div>
+                    <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe></div>
+                    <div style="margin-top:20px">
+                        <h2>${a.title.romaji}</h2>
+                        <div style="margin:10px 0">${a.genres.map((g) => `<span style="background:var(--primary); font-size:11px; padding:3px 10px; border-radius:20px; margin-right:5px">${g}</span>`).join("")}</div>
+                        <p style="color:#aaa; font-size:14px; line-height:1.6">${sinopsisIndo}</p>
+                    </div>
+                </div>
+                <div class="episodes-box">
+                    <h3>Daftar Episode</h3>
+                    <div class="ep-list">${Array.from({ length: a.episodes || 12 }, (_, i) => `<div class="ep-item">Episode ${i + 1}</div>`).join("")}</div>
+                </div>
+            </div>
+        `;
+          showPage("detail-page");
+        } catch (e) {
+          console.error(e);
+        } finally {
+          toggleLoader(false);
+        }
+      }
+
+      // Search
       async function handleSearch(e) {
         if (e.key === "Enter") {
           toggleLoader(true);
@@ -583,68 +644,7 @@
         }
       }
 
-      async function loadSchedule() {
-        toggleLoader(true);
-        const query = `query{ Page(perPage:18){ airingSchedules(airingAt_greater:${Math.floor(Date.now() / 1000)}, sort:TIME){ media{ id title{romaji} coverImage{large} } episode } } }`;
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query }),
-        });
-        const json = await res.json();
-        const list = json.data.Page.airingSchedules.map((i) => ({
-          ...i.media,
-          episode: i.episode,
-        }));
-        renderCategory("Rilis Hari Ini", list);
-      }
-
-      function renderCategory(title, data) {
-        document.getElementById("category-title").innerText = title;
-        document.getElementById("category-list").innerHTML = data
-          .map(
-            (a) => `
-          <div class="anime-card" onclick="loadDetail(${a.id})">
-            <img src="${a.coverImage.large}">
-            <div class="card-info"><h3>${a.title.romaji}</h3> ${a.episode ? `<p style="color:var(--primary)">Eps ${a.episode}</p>` : ""}</div>
-          </div>
-        `,
-          )
-          .join("");
-        showPage("category-page");
-        toggleLoader(false);
-      }
-
-      // 4. Global Chat Logic
-      function toggleChat() {
-        const win = document.getElementById("chat-window");
-        win.style.display = win.style.display === "flex" ? "none" : "flex";
-      }
-
-      function sendMessage() {
-        const input = document.getElementById("chat-input");
-        const msgBox = document.getElementById("chat-messages");
-        if (input.value.trim()) {
-          const div = document.createElement("div");
-          div.className = "msg me";
-          div.innerText = input.value;
-          msgBox.appendChild(div);
-          input.value = "";
-          msgBox.scrollTop = msgBox.scrollHeight;
-
-          // Bot response simple
-          setTimeout(() => {
-            const botDiv = document.createElement("div");
-            botDiv.className = "msg";
-            botDiv.innerText =
-              "Keren! Ngomong-ngomong, sudah nonton episode terbaru minggu ini?";
-            msgBox.appendChild(botDiv);
-            msgBox.scrollTop = msgBox.scrollHeight;
-          }, 1000);
-        }
-      }
-
-      // Slider Logic
+      // Slider & Chat Logic
       let slideIdx = 0;
       function startAutoSlide() {
         setInterval(() => {
@@ -653,7 +653,12 @@
           slides[slideIdx].classList.remove("active");
           slideIdx = (slideIdx + 1) % slides.length;
           slides[slideIdx].classList.add("active");
-        }, 6000);
+        }, 5000);
+      }
+
+      function toggleChat() {
+        const win = document.getElementById("chat-window");
+        win.style.display = win.style.display === "flex" ? "none" : "flex";
       }
 
       window.onload = initHome;
